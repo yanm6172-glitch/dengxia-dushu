@@ -69,4 +69,47 @@
   </view>
 
   <view class="footer">书库为公版古籍 · 长按「自藏」书可删除</view>
+
+  <!-- 新手引导 -->
+  <view class="guide-overlay" wx:if="{{showGuide}}">
+    <swiper class="guide-swiper" current="{{guideIndex}}" bindchange="guideChange" duration="300">
+      <swiper-item>
+        <view class="g-slide s1">
+          <view class="g-logo">灯</view>
+          <view class="g-title">灯下读书</view>
+          <view class="g-sub">一盏灯 · 一卷书 · 一段静好的时光</view>
+          <view class="g-desc">26 本公版古籍已内置\n点「立即读书」马上开读</view>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view class="g-slide s2">
+          <view class="g-ico">🎨</view>
+          <view class="g-title">舒适的阅读器</view>
+          <view class="g-desc">四套纸张主题 · 三种字体 · 行距缩进可调\n自动滚动 · 全文搜索 · 书摘卡一键分享</view>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view class="g-slide s3">
+          <view class="g-ico">🔥</view>
+          <view class="g-title">坚持看得见</view>
+          <view class="g-desc">每日目标 · 打卡热力图 · 阅读报告卡\n书签、笔记、摘抄，好句子都留得住</view>
+        </view>
+      </swiper-item>
+      <swiper-item>
+        <view class="g-slide s4">
+          <view class="g-ico">📂</view>
+          <view class="g-title">带上自己的书</view>
+          <view class="g-desc">PDF / EPUB / TXT / Word 都能导入\n电脑直传 · 微信 QQ 文件 · 登录后云同步</view>
+        </view>
+      </swiper-item>
+    </swiper>
+    <view class="g-dots">
+      <view class="g-dot {{guideIndex === 0 ? 'on' : ''}}"></view>
+      <view class="g-dot {{guideIndex === 1 ? 'on' : ''}}"></view>
+      <view class="g-dot {{guideIndex === 2 ? 'on' : ''}}"></view>
+      <view class="g-dot {{guideIndex === 3 ? 'on' : ''}}"></view>
+    </view>
+    <view class="g-skip" bindtap="skipGuide">跳过</view>
+    <view class="g-next" bindtap="nextGuide">{{guideIndex === 3 ? '开始读书' : '下一步'}}</view>
+  </view>
 </view>

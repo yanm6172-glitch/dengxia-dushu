@@ -147,6 +147,10 @@ Page({
     }
     return cols;
   },
+  replayGuide() {
+    try { wx.removeStorageSync('onboarding_done'); } catch (e) {}
+    wx.switchTab({ url: '/pages/index/index' });
+  },
   openRestore() {
     this.setData({ showRestore: true });
   },

@@ -24,10 +24,34 @@ Page({
     streak: 0,
     goalMinutes: 25,
     goalPercent: 0,
-    goalDone: false
+    goalDone: false,
+    showGuide: false,
+    guideIndex: 0
   },
   onShow() {
+    let done = false;
+    try { done = !!wx.getStorageSync('onboarding_done'); } catch (e) {}
+    if (!done) {
+      this.setData({ showGuide: true, guideIndex: 0 });
+    }
     this.refresh();
+  },
+  guideChange(e) {
+    this.setData({ guideIndex: e.detail.current });
+  },
+  nextGuide() {
+    if (this.data.guideIndex >= 3) {
+      this.finishGuide();
+    } else {
+      this.setData({ guideIndex: this.data.guideIndex + 1 });
+    }
+  },
+  skipGuide() {
+    this.finishGuide();
+  },
+  finishGuide() {
+    this.setData({ showGuide: false });
+    try { wx.setStorageSync('onboarding_done', 1); } catch (e) {}
   },
   refresh() {
     const progress = app.globalData.progress;

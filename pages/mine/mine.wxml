@@ -121,6 +121,10 @@
     <view class="setting-label">恢复数据</view>
     <view class="setting-right">粘贴备份还原 ›</view>
   </view>
+  <view class="goal-row" bindtap="replayGuide">
+    <view class="setting-label">新手引导</view>
+    <view class="setting-right">重新查看 ›</view>
+  </view>
 
   <view class="section-title">我的书籍（{{customBooks.length}}）</view>
   <view class="empty" wx:if="{{customBooks.length === 0}}">还没有自藏书。点上方按钮，从微信文件或粘贴文本导入。</view>
