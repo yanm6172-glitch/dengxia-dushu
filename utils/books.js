@@ -29,7 +29,8 @@ const list = [
   { id: 'zengguang', title: '增广贤文', author: '周希陶', category: '蒙学' },
   { id: 'sanzijing', title: '三字经', author: '王应麟', category: '蒙学' },
   { id: 'qianziwen', title: '千字文', author: '周兴嗣', category: '蒙学' },
-  { id: 'dizigui', title: '弟子规', author: '李毓秀', category: '蒙学' }
+  { id: 'dizigui', title: '弟子规', author: '李毓秀', category: '蒙学' },
+  { id: 'liweng', title: '笠翁对韵', author: '李渔', category: '蒙学' }
 ];
 
 const categories = ['四书', '修身', '道家', '兵家', '诗文', '笔记', '蒙学'];

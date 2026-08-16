@@ -524,6 +524,56 @@ Page({
     this.setData({ font: f });
     wx.setStorageSync('reader_font', f);
   },
+  // ---------- 朗读 ----------
+  speakParagraph(idx) {
+    const para = this.data.paragraphs[idx];
+    if (!para || !para.t) return;
+    const text = para.t.slice(0, 400);
+    let plugin = null;
+    try {
+      plugin = requirePlugin('WechatSI');
+    } catch (e) {
+      plugin = null;
+    }
+    if (!plugin) {
+      wx.showModal({
+        title: '朗读不可用',
+        content: '需要在微信公众平台「设置-第三方设置-插件管理」添加「微信同声传译」插件（免费）后重试。',
+        showCancel: false
+      });
+      return;
+    }
+    if (this._audio) {
+      try { this._audio.stop(); } catch (e) {}
+    }
+    const that = this;
+    plugin.textToSpeech({
+      lang: 'zh_CN',
+      tts: true,
+      content: text,
+      success(res) {
+        if (!res || !res.filename) return;
+        const audio = wx.createInnerAudioContext();
+        audio.src = res.filename;
+        audio.play();
+        that._audio = audio;
+        wx.showToast({ title: '朗读中…再选一次可替换', icon: 'none' });
+      },
+      fail() {
+        wx.showModal({
+          title: '朗读失败',
+          content: '同声传译插件未授权或额度用尽。请确认已在公众平台添加该插件。',
+          showCancel: false
+        });
+      }
+    });
+  },
+  stopAudio() {
+    if (this._audio) {
+      try { this._audio.stop(); this._audio.destroy(); } catch (e) {}
+      this._audio = null;
+    }
+  },
   // ---------- 书摘卡 ----------
   makeShareCard(idx) {
     const para = this.data.paragraphs[idx];
@@ -626,7 +676,7 @@ Page({
     if (!para) return;
     const that = this;
     wx.showActionSheet({
-      itemList: ['复制本段', '添加书签', '写笔记', '生成书摘卡'],
+      itemList: ['复制本段', '添加书签', '写笔记', '生成书摘卡', '朗读本段'],
       success(res) {
         if (res.tapIndex === 0) {
           wx.setClipboardData({ data: para.t });
@@ -650,6 +700,8 @@ Page({
           that.openNoteEditor(idx);
         } else if (res.tapIndex === 3) {
           that.makeShareCard(idx);
+        } else if (res.tapIndex === 4) {
+          that.speakParagraph(idx);
         }
       }
     });
@@ -669,11 +721,13 @@ Page({
     this.endSession();
     this.saveProgress();
     this.stopAuto();
+    this.stopAudio();
   },
   onUnload() {
     this.endSession();
     this.saveProgress();
     this.stopAuto();
+    this.stopAudio();
   },
   onShareAppMessage() {
     return {
