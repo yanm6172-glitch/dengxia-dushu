@@ -128,6 +128,29 @@ App({
     try { wx.setStorageSync('bookmarks', all); } catch (e) {}
     this.scheduleCloudPush('bookmarks');
   },
+  // 全部书签（摘抄）汇总：跨书合并，附书名，按时间倒序
+  getAllBookmarks() {
+    let all = {};
+    try { all = wx.getStorageSync('bookmarks') || {}; } catch (e) {}
+    const titleMap = {};
+    books.list.forEach((b) => { titleMap[b.id] = b.title; });
+    (this.globalData.customBooks || []).forEach((b) => { titleMap[b.id] = b.title; });
+    const rows = [];
+    Object.keys(all).forEach((bid) => {
+      const marks = all[bid] || [];
+      marks.forEach((m) => {
+        rows.push({
+          bookId: bid,
+          bookTitle: titleMap[bid] || '未命名书',
+          text: m.t,
+          idx: m.idx,
+          ts: m.ts || 0
+        });
+      });
+    });
+    rows.sort((a, b) => b.ts - a.ts);
+    return rows;
+  },
   // ===== 进度与统计 =====
   saveProgress() {
     try { wx.setStorageSync('reading_progress', this.globalData.progress); } catch (e) {}

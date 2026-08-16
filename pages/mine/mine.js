@@ -18,7 +18,13 @@ Page({
     syncText: '',
     remind: false,
     calendar: [],
-    monthLabel: ''
+    monthLabel: '',
+    marksTotal: 0,
+    marksPreview: [],
+    allMarks: [],
+    showMarks: false,
+    showReport: false,
+    reportImage: ''
   },
   onShow() {
     let remind = false;
@@ -41,6 +47,7 @@ Page({
     const u = auth.getUser();
     const s = auth.getSession();
     const openid = (s && s.openid) || '';
+    const rows = app.getAllBookmarks();
     this.setData({
       totalHours: Math.round(st.totalSeconds / 3600 * 10) / 10,
       totalDays: st.totalDays,
@@ -55,7 +62,9 @@ Page({
       openidShort: openid ? openid.slice(0, 6) + '…' + openid.slice(-4) : '',
       syncText,
       calendar: this.buildCalendar(st),
-      monthLabel: (new Date().getMonth() + 1) + ' 月打卡'
+      monthLabel: (new Date().getMonth() + 1) + ' 月打卡',
+      marksTotal: rows.length,
+      marksPreview: rows.slice(0, 2)
     });
   },
   goLogin() {
@@ -126,6 +135,117 @@ Page({
     this.refresh();
     wx.showToast({ title: '目标已设为 ' + g + ' 分钟', icon: 'none' });
   },
+  openMarksSheet() {
+    this.setData({ showMarks: true, allMarks: app.getAllBookmarks() });
+  },
+  closeMarksSheet() {
+    this.setData({ showMarks: false });
+  },
+  copyMarks() {
+    const rows = app.getAllBookmarks();
+    if (!rows.length) return;
+    const text = rows.map((r, i) => (i + 1) + '. 《' + r.bookTitle + '》 ' + r.text).join('\n');
+    wx.setClipboardData({
+      data: text,
+      success() {
+        wx.showToast({ title: '已复制 ' + rows.length + ' 条摘抄', icon: 'success' });
+      }
+    });
+  },
+  makeReport() {
+    this.setData({ showReport: true, reportImage: '' });
+    wx.nextTick(() => this.drawReport());
+  },
+  drawReport() {
+    const that = this;
+    wx.createSelectorQuery().in(this).select('#reportCanvas').fields({ node: true, size: true }).exec((res) => {
+      if (!res || !res[0] || !res[0].node) return;
+      const canvas = res[0].node;
+      const w = 300;
+      const h = 440;
+      const dpr = wx.getSystemInfoSync().pixelRatio || 2;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const st = app.getReadingStats();
+      const progress = app.globalData.progress;
+      let finished = 0;
+      Object.keys(progress).forEach((k) => {
+        if ((progress[k].percent || 0) >= 99) finished++;
+      });
+      const now = new Date();
+      const ym = now.getFullYear() + '-' + ('0' + (now.getMonth() + 1)).slice(-2);
+      let monthDays = 0;
+      Object.keys(st.daysMap || {}).forEach((k) => {
+        if (k.indexOf(ym) === 0 && st.daysMap[k] >= 60) monthDays++;
+      });
+      ctx.fillStyle = '#f7f1e0';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#8c5a3c';
+      ctx.fillRect(0, 0, w, 10);
+      ctx.fillStyle = '#3b3224';
+      ctx.font = 'bold 24px "Songti SC","STSong","SimSun",serif';
+      ctx.fillText('灯下读书 · 阅读报告', 24, 56);
+      ctx.fillStyle = '#b3a488';
+      ctx.font = '12px sans-serif';
+      ctx.fillText(now.getFullYear() + ' 年 ' + (now.getMonth() + 1) + ' 月', 24, 80);
+      ctx.strokeStyle = '#c9b28a';
+      ctx.beginPath();
+      ctx.moveTo(24, 96);
+      ctx.lineTo(w - 24, 96);
+      ctx.stroke();
+      const items = [
+        { num: String(Math.round(st.totalSeconds / 3600 * 10) / 10), label: '累计阅读(小时)' },
+        { num: String(st.totalDays), label: '阅读天数' },
+        { num: String(st.streak), label: '连续打卡' },
+        { num: String(finished), label: '读完本数' },
+        { num: String(monthDays), label: '本月打卡(天)' }
+      ];
+      const cols = 2;
+      const cellW = (w - 48) / cols;
+      items.forEach((it, i) => {
+        const cx = 24 + (i % cols) * cellW;
+        const cy = 130 + Math.floor(i / cols) * 84;
+        ctx.fillStyle = '#8c5a3c';
+        ctx.font = 'bold 30px sans-serif';
+        ctx.fillText(it.num, cx, cy + 24);
+        ctx.fillStyle = '#9c8a6c';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(it.label, cx, cy + 48);
+      });
+      ctx.fillStyle = '#b3a488';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('读圣贤书 · 养浩然气', 24, h - 40);
+      ctx.fillText('灯下读书', w - 24 - ctx.measureText('灯下读书').width, h - 40);
+      ctx.fillStyle = '#c9b28a';
+      ctx.fillRect(0, h - 8, w, 8);
+      wx.canvasToTempFilePath({
+        canvas,
+        success(r) { that.setData({ reportImage: r.tempFilePath }); },
+        fail() { wx.showToast({ title: '生成失败，请重试', icon: 'none' }); }
+      }, that);
+    });
+  },
+  saveReport() {
+    if (!this.data.reportImage) return;
+    wx.saveImageToPhotosAlbum({
+      filePath: this.data.reportImage,
+      success() { wx.showToast({ title: '已保存到相册', icon: 'success' }); },
+      fail() {
+        wx.showModal({
+          title: '需要相册权限',
+          content: '请在设置中允许保存到相册',
+          confirmText: '去设置',
+          success(r) { if (r.confirm) wx.openSetting(); }
+        });
+      }
+    });
+  },
+  closeReport() {
+    this.setData({ showReport: false });
+  },
+  noop() {},
   goImport() {
     wx.navigateTo({ url: '/pages/import/import' });
   },

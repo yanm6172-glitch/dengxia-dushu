@@ -418,3 +418,21 @@
   border-radius: 40rpx;
   padding: 14rpx 80rpx;
 }
+/* 动效 */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.bottom-panel {
+  animation: slideUp 0.25s ease;
+}
+.mask {
+  animation: fadeIn 0.2s ease;
+}
+.share-overlay {
+  animation: fadeIn 0.25s ease;
+}

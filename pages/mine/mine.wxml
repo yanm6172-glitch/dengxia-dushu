@@ -59,10 +59,22 @@
   </view>
 
   <button class="btn-main" bindtap="goImport">＋ 导入自己的书籍</button>
+  <button class="btn-report" bindtap="makeReport">📜 生成阅读报告 · 分享</button>
   <view class="setting-row" bindtap="toggleRemind">
     <view class="setting-label">每日阅读提醒</view>
     <view class="setting-right">{{remind ? '已开启' : '未开启'}} ›</view>
   </view>
+  <view class="marks-card" bindtap="openMarksSheet">
+    <view class="marks-head">
+      <view class="setting-label">我的摘抄（{{marksTotal}}）</view>
+      <view class="setting-right">{{marksTotal > 0 ? '查看全部 ›' : '长按正文可添加书签 ›'}}</view>
+    </view>
+    <view class="marks-item" wx:for="{{marksPreview}}" wx:key="idx">
+      <view class="marks-src">《{{item.bookTitle}}》</view>
+      <view class="marks-text">{{item.text}}</view>
+    </view>
+  </view>
+
   <view class="goal-row">
     <view class="setting-label">每日阅读目标</view>
     <view class="goal-chips">
@@ -85,4 +97,31 @@
   </view>
 
   <view class="about">灯下读书 v4 · 书库为公版古籍 · 自藏书仅存本机</view>
+
+  <!-- 摘抄面板 -->
+  <view class="mask" wx:if="{{showMarks}}" bindtap="closeMarksSheet"></view>
+  <view class="marks-sheet" wx:if="{{showMarks}}">
+    <view class="sheet-title">全部摘抄（{{allMarks.length}}）</view>
+    <scroll-view scroll-y class="sheet-list">
+      <view class="marks-item" wx:for="{{allMarks}}" wx:key="idx">
+        <view class="marks-src">《{{item.bookTitle}}》</view>
+        <view class="marks-text">{{item.text}}</view>
+      </view>
+      <view class="sheet-empty" wx:if="{{allMarks.length === 0}}">还没有摘抄，去阅读页长按喜欢的段落添加书签</view>
+    </scroll-view>
+    <button class="btn-copy" bindtap="copyMarks" disabled="{{allMarks.length === 0}}">复制全部摘抄</button>
+  </view>
+
+  <!-- 阅读报告 -->
+  <view class="mask" wx:if="{{showReport}}" bindtap="closeReport"></view>
+  <view class="report-overlay" wx:if="{{showReport}}" catchtap="noop">
+    <view class="sheet-title" style="text-align:center">阅读报告</view>
+    <image wx:if="{{reportImage}}" class="report-img" src="{{reportImage}}" mode="widthFix" />
+    <view wx:else class="report-loading">生成中…</view>
+    <view class="report-btns">
+      <button class="rb save" bindtap="saveReport" disabled="{{!reportImage}}">保存到相册</button>
+      <button class="rb close" bindtap="closeReport">关闭</button>
+    </view>
+  </view>
+  <canvas type="2d" id="reportCanvas" class="report-canvas"></canvas>
 </view>

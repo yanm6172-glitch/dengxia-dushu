@@ -43,7 +43,7 @@
 
   <view class="section" wx:for="{{grouped}}" wx:key="name" wx:for-item="group">
     <view class="section-title">{{group.name}}</view>
-    <view class="book-card" wx:for="{{group.books}}" wx:key="id" data-id="{{item.id}}" bindlongpress="deleteBook">
+    <view class="book-card" hover-class="card-hover" wx:for="{{group.books}}" wx:key="id" data-id="{{item.id}}" bindlongpress="deleteBook">
       <view class="cover {{item.color}}">{{item.firstChar}}</view>
       <view class="book-main">
         <view class="book-title-line">
