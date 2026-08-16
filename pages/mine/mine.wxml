@@ -86,6 +86,23 @@
     </view>
   </view>
 
+  <view class="heat-card">
+    <view class="heat-title">年度足迹 · 近 26 周</view>
+    <view class="heat-grid">
+      <view class="heat-col" wx:for="{{heatmap}}" wx:for-item="col" wx:key="index">
+        <view class="heat-cell {{cell.level > 0 ? 'l' + cell.level : ''}} {{cell.today ? 'today' : ''}}" wx:for="{{col}}" wx:for-item="cell" wx:key="k"></view>
+      </view>
+    </view>
+    <view class="heat-legend">
+      <text>少</text>
+      <view class="hl h0"></view>
+      <view class="hl h1"></view>
+      <view class="hl h2"></view>
+      <view class="hl h3"></view>
+      <text>多</text>
+    </view>
+  </view>
+
   <view class="goal-row">
     <view class="setting-label">每日阅读目标</view>
     <view class="goal-chips">
@@ -95,6 +112,10 @@
       <text class="goal-chip {{goalMinutes === 45 ? 'on' : ''}}" data-g="45" bindtap="setGoal">45</text>
       <text class="goal-unit">分钟</text>
     </view>
+  </view>
+  <view class="goal-row" bindtap="doBackup">
+    <view class="setting-label">备份数据</view>
+    <view class="setting-right">复制到剪贴板 ›</view>
   </view>
 
   <view class="section-title">我的书籍（{{customBooks.length}}）</view>

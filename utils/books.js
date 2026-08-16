@@ -24,10 +24,15 @@ const list = [
   { id: 'tangshi', title: '唐诗三百首', author: '蘅塘退士', category: '诗文' },
   { id: 'renjian', title: '人间词话', author: '王国维', category: '诗文' },
   { id: 'guwen', title: '古文观止', author: '吴楚材 · 吴调侯', category: '诗文' },
-  { id: 'shishuo', title: '世说新语', author: '刘义庆', category: '笔记' }
+  { id: 'shishuo', title: '世说新语', author: '刘义庆', category: '笔记' },
+  { id: 'yanshi', title: '颜氏家训', author: '颜之推', category: '修身' },
+  { id: 'zengguang', title: '增广贤文', author: '周希陶', category: '蒙学' },
+  { id: 'sanzijing', title: '三字经', author: '王应麟', category: '蒙学' },
+  { id: 'qianziwen', title: '千字文', author: '周兴嗣', category: '蒙学' },
+  { id: 'dizigui', title: '弟子规', author: '李毓秀', category: '蒙学' }
 ];
 
-const categories = ['四书', '修身', '道家', '兵家', '诗文', '笔记'];
+const categories = ['四书', '修身', '道家', '兵家', '诗文', '笔记', '蒙学'];
 
 // base64 -> Uint8Array（纯 JS，兼容所有环境）
 function base64ToBytes(b64) {

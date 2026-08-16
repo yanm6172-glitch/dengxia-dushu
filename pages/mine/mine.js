@@ -28,7 +28,8 @@ Page({
     allNotes: [],
     showNotes: false,
     showReport: false,
-    reportImage: ''
+    reportImage: '',
+    heatmap: []
   },
   onShow() {
     let remind = false;
@@ -71,7 +72,8 @@ Page({
       marksTotal: rows.length,
       marksPreview: rows.slice(0, 2),
       notesTotal: noteRows.length,
-      notesPreview: noteRows.slice(0, 2)
+      notesPreview: noteRows.slice(0, 2),
+      heatmap: this.buildHeatmap(st)
     });
   },
   goLogin() {
@@ -121,6 +123,40 @@ Page({
       cal.push({ d, on: sec >= 60 });
     }
     return cal;
+  },
+  buildHeatmap(st) {
+    const goal = app.getReadingGoal();
+    const cols = [];
+    const today = new Date();
+    const keyOf = (d) => d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    for (let c = 0; c < 26; c++) {
+      const col = [];
+      for (let r = 0; r < 7; r++) {
+        const back = (25 - c) * 7 + (6 - r);
+        const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - back);
+        const mins = Math.round(((st.daysMap && st.daysMap[keyOf(d)]) || 0) / 60);
+        let level = 0;
+        if (mins >= goal) level = 3;
+        else if (mins >= 15) level = 2;
+        else if (mins >= 1) level = 1;
+        col.push({ k: c + '-' + r, level, today: back === 0 });
+      }
+      cols.push(col);
+    }
+    return cols;
+  },
+  doBackup() {
+    const json = app.exportBackup();
+    wx.setClipboardData({
+      data: json,
+      success() {
+        wx.showModal({
+          title: '备份已复制',
+          content: '阅读数据已复制到剪贴板（约 ' + Math.round(json.length / 1024) + ' KB），请粘贴保存到备忘录或文件中。',
+          showCancel: false
+        });
+      }
+    });
   },
   toggleRemind() {
     const next = !this.data.remind;

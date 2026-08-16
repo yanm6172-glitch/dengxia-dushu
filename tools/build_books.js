@@ -27,7 +27,12 @@ const BOOKS = [
   ['tangshi', '唐诗三百首_古腾堡_繁体.txt'],
   ['renjian', '人间词话_古腾堡_繁体.txt'],
   ['guwen', '古文观止_古腾堡_繁体.txt'],
-  ['shishuo', '世说新语_古腾堡_繁体.txt']
+  ['shishuo', '世说新语_古腾堡_繁体.txt'],
+  ['zengguang', '增广贤文_简体.txt'],
+  ['sanzijing', '三字经_简体.txt'],
+  ['qianziwen', '千字文_简体.txt'],
+  ['dizigui', '弟子规_简体.txt'],
+  ['yanshi', '颜氏家训_简体.txt']
 ];
 
 const parts = [];

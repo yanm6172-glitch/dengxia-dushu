@@ -213,6 +213,24 @@ App({
     const goal = this.getReadingGoal();
     return (s.days[key] || 0) >= goal * 60;
   },
+  exportBackup() {
+    const data = {
+      version: 14,
+      exportedAt: Date.now(),
+      progress: this.globalData.progress,
+      stats: this.globalData.stats,
+      bookmarks: {},
+      notes: {},
+      customBooks: this.globalData.customBooks,
+      settings: {}
+    };
+    try { data.bookmarks = wx.getStorageSync('bookmarks') || {}; } catch (e) {}
+    try { data.notes = wx.getStorageSync('notes') || {}; } catch (e) {}
+    try { data.settings.reading_goal = wx.getStorageSync('reading_goal') || 25; } catch (e) {}
+    try { data.settings.reader_theme = wx.getStorageSync('reader_theme') || 'paper'; } catch (e) {}
+    try { data.settings.reader_font = wx.getStorageSync('reader_font') || 'song'; } catch (e) {}
+    return JSON.stringify(data);
+  },
   getReadingGoal() {
     try {
       const g = wx.getStorageSync('reading_goal');
