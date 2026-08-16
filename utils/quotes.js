@@ -12,7 +12,8 @@ const quotes = [
   { text: '善谋生者，但令长幼内外，勤修恒业，而不必富其家。', bookId: 'weilu', book: '围炉夜话' },
   { text: '知彼知己，百战不殆。', bookId: 'sunzi', book: '孙子兵法' },
   { text: '词以境界为最上。有境界则自成高格，自有名句。', bookId: 'renjian', book: '人间词话' },
-  { text: '黎明即起，洒扫庭除，要内外整洁。', bookId: 'zhuzi', book: '朱子治家格言' }
+  { text: '黎明即起，洒扫庭除，要内外整洁。', bookId: 'zhuzi', book: '朱子治家格言' },
+  { text: '天对地，雨对风，大陆对长空。', bookId: 'liweng', book: '笠翁对韵' }
 ];
 
 module.exports = { quotes };

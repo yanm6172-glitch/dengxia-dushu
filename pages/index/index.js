@@ -9,6 +9,7 @@ const COLORS = {
   '兵家': 'c-bingjia',
   '诗文': 'c-shiwen',
   '笔记': 'c-biji',
+  '蒙学': 'c-mengxue',
   '我的书籍': 'c-mine'
 };
 

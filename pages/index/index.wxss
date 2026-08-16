@@ -169,6 +169,7 @@
 .c-shiwen { background: #96688c; }
 .c-biji { background: #5c8080; }
 .c-mine { background: #a06a48; }
+.c-mengxue { background: #a5852e; }
 .book-main {
   flex: 1;
   margin-right: 16rpx;

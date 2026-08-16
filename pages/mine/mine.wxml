@@ -128,7 +128,7 @@
     <view class="mb-del" data-id="{{item.id}}" catchtap="deleteBook">删除</view>
   </view>
 
-  <view class="about">灯下读书 v4 · 书库为公版古籍 · 自藏书仅存本机</view>
+  <view class="about">灯下读书 v17 · 书库为公版古籍 · 自藏书仅存本机</view>
 
   <!-- 摘抄面板 -->
   <view class="mask" wx:if="{{showMarks}}" bindtap="closeMarksSheet"></view>
