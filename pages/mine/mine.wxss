@@ -1,0 +1,249 @@
+.page {
+  padding: 30rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
+}
+.user-card {
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border-radius: 20rpx;
+  padding: 28rpx 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+  margin-bottom: 26rpx;
+}
+.avatar-btn {
+  width: 96rpx;
+  height: 96rpx;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border-radius: 50%;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.avatar-btn::after { border: none; }
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-ph {
+  background: #e8ddc8;
+  color: #a06a48;
+  font-size: 32rpx;
+}
+.user-info {
+  flex: 1;
+  margin-left: 24rpx;
+}
+.nickname {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.nickname-guest {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.uid {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #9c8a6c;
+}
+.login-btn {
+  background: #07c160;
+  color: #ffffff;
+  font-size: 26rpx;
+  border-radius: 32rpx;
+  padding: 12rpx 30rpx;
+  flex-shrink: 0;
+}
+.logout-btn {
+  font-size: 24rpx;
+  color: #b3592f;
+  border: 1rpx solid #e0c0a8;
+  border-radius: 26rpx;
+  padding: 8rpx 24rpx;
+  flex-shrink: 0;
+}
+.stats-card {
+  background: #fdfaf3;
+  border-radius: 20rpx;
+  padding: 30rpx 26rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+  margin-bottom: 26rpx;
+}
+.stats-row {
+  display: flex;
+}
+.stat {
+  flex: 1;
+  text-align: center;
+}
+.stat .num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #8c5a3c;
+}
+.stat .label {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: #9c8a6c;
+}
+.chart-title {
+  margin-top: 30rpx;
+  font-size: 24rpx;
+  color: #8a7a5f;
+}
+.chart {
+  margin-top: 18rpx;
+  display: flex;
+  align-items: flex-end;
+  height: 140rpx;
+}
+.bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.bar-min {
+  font-size: 18rpx;
+  color: #b3a488;
+  margin-bottom: 6rpx;
+}
+.bar-inner {
+  width: 36rpx;
+  background: linear-gradient(180deg, #c9a06a, #a06a48);
+  border-radius: 8rpx 8rpx 0 0;
+}
+.bar-label {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #9c8a6c;
+}
+.btn-main {
+  background: #8c5a3c;
+  color: #fdf6e9;
+  font-size: 30rpx;
+  border-radius: 40rpx;
+  padding: 14rpx 0;
+  margin-bottom: 34rpx;
+}
+.section-title {
+  font-size: 30rpx;
+  color: #8a7a5f;
+  padding: 0 8rpx 16rpx;
+  letter-spacing: 4rpx;
+}
+.empty {
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  font-size: 24rpx;
+  color: #b3a488;
+  text-align: center;
+  line-height: 1.7;
+}
+.my-book {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  margin-bottom: 18rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.mb-title {
+  font-size: 30rpx;
+  color: #3b3224;
+  font-weight: 600;
+}
+.mb-sub {
+  font-size: 22rpx;
+  color: #9c8a6c;
+  margin-top: 6rpx;
+}
+.mb-del {
+  font-size: 24rpx;
+  color: #b3592f;
+  border: 1rpx solid #e0c0a8;
+  border-radius: 26rpx;
+  padding: 8rpx 26rpx;
+}
+.about {
+  margin-top: 50rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #b3a488;
+}
+.cal-card {
+  background: #fdfaf3;
+  border-radius: 20rpx;
+  padding: 26rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+  margin-bottom: 26rpx;
+}
+.cal-title {
+  font-size: 24rpx;
+  color: #8a7a5f;
+  margin-bottom: 18rpx;
+}
+.cal-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+.cal-cell {
+  width: 14.28%;
+  display: flex;
+  justify-content: center;
+  padding: 6rpx 0;
+}
+.cal-day {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #b3a488;
+}
+.cal-day.on {
+  background: #a06a48;
+  color: #fdf6e9;
+  font-weight: 600;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  margin-bottom: 18rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.setting-label {
+  font-size: 28rpx;
+  color: #3b3224;
+}
+.setting-right {
+  font-size: 24rpx;
+  color: #9c8a6c;
+}
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+.nickname {
+  width: 100%;
+}

@@ -1,0 +1,57 @@
+<view class="page">
+  <view class="intro">把手机、电脑等任意设备上的电子书导入书架，随时开卷。</view>
+
+  <view class="card">
+    <view class="card-title">方式一 · 本地上传（手机 / 电脑）</view>
+    <view class="hint {{pcMode ? 'pc' : ''}}">
+      <block wx:if="{{pcMode}}">💻 当前在电脑端：点下方按钮直接打开电脑本地文件对话框，可一次多选（最多 20 个）。</block>
+      <block wx:else>📱 当前在手机端：先把文件发到微信「文件传输助手」或任意聊天，再点下方按钮选择；电脑微信发来的文件同样可选。</block>
+    </view>
+    <view class="card-desc">支持 PDF / EPUB / TXT / Word / Excel / PPT 等常见格式，无大小限制；同名同格式文件自动跳过。</view>
+    <view class="src-guide">
+      <view class="sg-title">文件来源指南（手机端）</view>
+      <view class="sg-row">
+        <text class="sg-ico">🟢</text>
+        <view class="sg-body">
+          <view class="sg-h">微信文件</view>
+          <view class="sg-d">点下方按钮，在「聊天中的文件」里直接勾选。</view>
+        </view>
+      </view>
+      <view class="sg-row">
+        <text class="sg-ico">🐧</text>
+        <view class="sg-body">
+          <view class="sg-h">QQ 文件</view>
+          <view class="sg-d">在 QQ 里长按文件 → 更多 → 「发送给朋友 / 用其他应用打开」→ 发给微信「文件传输助手」→ 回来点下方按钮选择。</view>
+        </view>
+      </view>
+      <view class="sg-row">
+        <text class="sg-ico">📂</text>
+        <view class="sg-body">
+          <view class="sg-h">手机本地文件</view>
+          <view class="sg-d">文件管理器里选文件 → 「分享」→ 微信「文件传输助手」→ 回来选择。</view>
+        </view>
+      </view>
+    </view>
+    <view class="fmt-row">
+      <text class="fmt-chip">PDF</text>
+      <text class="fmt-chip">EPUB</text>
+      <text class="fmt-chip">TXT</text>
+      <text class="fmt-chip">Word</text>
+      <text class="fmt-chip">Excel</text>
+      <text class="fmt-chip">PPT</text>
+      <text class="fmt-chip">其他</text>
+    </view>
+    <button class="btn-main" bindtap="chooseFile" disabled="{{importing}}">{{importing ? '导入中…' : (pcMode ? '选择本地文件（可多选）' : '从聊天记录中选择（可多选）')}}</button>
+    <view class="card-note">PDF 与办公文档由微信内置阅读器打开；EPUB 自动提取正文并生成章节目录；TXT 按文本阅读。</view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">方式二 · 粘贴文本成书</view>
+    <view class="card-desc">适合短篇、讲义、笔记。粘贴正文，起个书名，保存后即可在书架阅读。</view>
+    <input class="title-input" placeholder="书名（必填）" value="{{title}}" bindinput="onInputTitle" maxlength="30" />
+    <textarea class="content-input" placeholder="在此粘贴正文……" value="{{content}}" bindinput="onInputContent" maxlength="-1"></textarea>
+    <button class="btn-main" bindtap="savePasted">保存到书架</button>
+  </view>
+
+  <view class="tip">多端使用：电脑端微信可直传本地文件；手机与电脑通过「文件传输助手」互传；开通云开发后，任一端导入的书籍会自动同步到其他设备。文件保存在本机微信数据目录（配额约 200MB），请确保内容来源合法。</view>
+</view>

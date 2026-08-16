@@ -1,0 +1,31 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/reader/reader",
+    "pages/mine/mine",
+    "pages/import/import",
+    "pages/login/login",
+    "pages/agreement/agreement"
+  ],
+
+  "tabBar": {
+    "color": "#9c8a6c",
+    "selectedColor": "#8c5a3c",
+    "backgroundColor": "#fdfaf3",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "书架" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "window": {
+    "navigationBarBackgroundColor": "#f6efe2",
+    "navigationBarTitleText": "灯下读书",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6efe2",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,236 @@
+.page {
+  padding: 30rpx 30rpx 60rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: calc(60rpx + env(safe-area-inset-bottom));
+}
+.hero-title {
+  font-size: 52rpx;
+  font-weight: 600;
+  color: #3b3224;
+  letter-spacing: 8rpx;
+}
+.hero-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #8a7a5f;
+}
+.day-strip {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #6d5c42;
+}
+.day-dot {
+  margin: 0 14rpx;
+  color: #c9b28a;
+}
+.last-card {
+  margin-top: 24rpx;
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+}
+.last-info {
+  flex: 1;
+  margin-left: 22rpx;
+  margin-right: 16rpx;
+}
+.last-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.last-sub {
+  font-size: 22rpx;
+  color: #9c8a6c;
+  margin-top: 6rpx;
+}
+.last-progress {
+  margin-top: 12rpx;
+  height: 8rpx;
+  background: #e8ddc8;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+.last-progress-inner {
+  height: 100%;
+  background: #a06a48;
+  border-radius: 4rpx;
+}
+.import-bar {
+  margin-top: 22rpx;
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border: 1rpx dashed #c9b28a;
+  border-radius: 16rpx;
+  padding: 22rpx 26rpx;
+}
+.import-plus {
+  font-size: 36rpx;
+  color: #a06a48;
+  font-weight: 700;
+  margin-right: 16rpx;
+}
+.import-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #6d5c42;
+}
+.import-arrow {
+  font-size: 34rpx;
+  color: #c9b28a;
+}
+.search-box {
+  margin-top: 22rpx;
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border-radius: 40rpx;
+  padding: 14rpx 28rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.search-icon {
+  font-size: 26rpx;
+  margin-right: 12rpx;
+}
+.search-input {
+  flex: 1;
+  font-size: 26rpx;
+  color: #3b3224;
+}
+.quote-card {
+  margin-top: 26rpx;
+  background: linear-gradient(135deg, #8c5a3c, #a06a48);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  color: #fdf6e9;
+  box-shadow: 0 8rpx 24rpx rgba(140, 90, 60, 0.25);
+}
+.quote-text {
+  font-size: 34rpx;
+  line-height: 1.7;
+  font-family: "Songti SC", "STSong", serif;
+}
+.quote-src {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  opacity: 0.85;
+}
+.btn-primary {
+  margin-top: 28rpx;
+  background: #fdf6e9;
+  color: #8c5a3c;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 40rpx;
+  padding: 12rpx 0;
+}
+.section {
+  margin-top: 40rpx;
+}
+.section-title {
+  font-size: 30rpx;
+  color: #8a7a5f;
+  padding: 0 8rpx 16rpx;
+  letter-spacing: 4rpx;
+}
+.book-card {
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+}
+.cover {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 14rpx;
+  color: #fdf6e9;
+  font-size: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 22rpx;
+  font-family: "Songti SC", "STSong", serif;
+  flex-shrink: 0;
+}
+.c-sishu { background: #8c5a3c; }
+.c-xiushen { background: #5f7d5f; }
+.c-daojia { background: #5a6a8c; }
+.c-bingjia { background: #8c4a4a; }
+.c-shiwen { background: #96688c; }
+.c-biji { background: #5c8080; }
+.c-mine { background: #a06a48; }
+.book-main {
+  flex: 1;
+  margin-right: 16rpx;
+}
+.book-title-line {
+  display: flex;
+  align-items: center;
+}
+.book-title {
+  font-size: 32rpx;
+  color: #3b3224;
+  font-weight: 600;
+}
+.tag {
+  margin-left: 14rpx;
+  font-size: 20rpx;
+  color: #a06a48;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  background: #f6efe2;
+}
+.book-author {
+  font-size: 22rpx;
+  color: #9c8a6c;
+  margin-top: 6rpx;
+}
+.progress {
+  margin-top: 14rpx;
+  display: flex;
+  align-items: center;
+}
+.progress-bar {
+  width: 160rpx;
+  height: 8rpx;
+  background: #e8ddc8;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+.progress-inner {
+  height: 100%;
+  background: #a06a48;
+  border-radius: 4rpx;
+}
+.progress-text {
+  font-size: 20rpx;
+  color: #9c8a6c;
+  margin-left: 12rpx;
+}
+.btn-read {
+  background: #f3ead9;
+  color: #8c5a3c;
+  border: 1rpx solid #d8c6a8;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  padding: 8rpx 24rpx;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+.footer {
+  text-align: center;
+  color: #b3a488;
+  font-size: 22rpx;
+  margin-top: 60rpx;
+}

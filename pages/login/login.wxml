@@ -1,0 +1,30 @@
+<view class="login-page">
+  <view class="brand">
+    <view class="logo">灯</view>
+    <view class="name">灯下读书</view>
+    <view class="slogan">一盏灯 · 一卷书 · 一段静好的时光</view>
+  </view>
+
+  <block wx:if="{{step === 1}}">
+    <view class="desc">微信一键登录，同步你的阅读进度与统计</view>
+    <button class="btn-wx" bindtap="doLogin">微信一键登录</button>
+    <view class="agree-line">
+      <view class="checkbox {{agreed ? 'on' : ''}}" bindtap="toggleAgree">{{agreed ? '✓' : ''}}</view>
+      <view class="agree-text">我已阅读并同意<text class="link" bindtap="goAgreement" data-type="user">《用户协议》</text>与<text class="link" bindtap="goAgreement" data-type="privacy">《隐私政策》</text></view>
+    </view>
+    <view class="guest" bindtap="guest">暂不登录，先逛逛 ›</view>
+  </block>
+
+  <block wx:else>
+    <view class="desc">完善资料，让大家认识你</view>
+    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+      <image wx:if="{{avatar}}" class="avatar-img" src="{{avatar}}" mode="aspectFill" />
+      <view wx:else class="avatar-img avatar-ph">＋</view>
+    </button>
+    <input type="nickname" class="nick-input" placeholder="点击填写昵称" value="{{nickname}}" bindinput="onNickname" maxlength="20" />
+    <button class="btn-wx" bindtap="saveProfile">保存并进入书房</button>
+    <view class="guest" bindtap="skipProfile">跳过，以后再说 ›</view>
+  </block>
+
+  <view class="foot">登录即代表同意服务条款 · 你的数据仅用于阅读服务</view>
+</view>

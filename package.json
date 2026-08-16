@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "pako": "^2.2.0"
+  }
+}

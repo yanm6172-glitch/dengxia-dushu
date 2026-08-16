@@ -1,0 +1,71 @@
+<view class="reader {{night ? 'night' : ''}}">
+  <view class="doc-panel" wx:if="{{viewMode === 'doc'}}">
+    <view class="doc-icon">📄</view>
+    <view class="doc-title">{{title}}</view>
+    <view class="doc-author">{{author}}</view>
+    <view class="doc-desc">该文档由微信内置阅读器打开</view>
+    <button class="doc-btn" bindtap="openDoc">打开文档</button>
+  </view>
+
+  <view class="reading-header" wx:if="{{viewMode === 'text'}}">
+    <view class="rh-line">
+      <text class="rh-chapter">{{currentChapter || title}}</text>
+      <text class="rh-percent">{{percent}}%</text>
+    </view>
+    <view class="rh-progress">
+      <view class="rh-progress-inner" style="width:{{percent}}%"></view>
+    </view>
+  </view>
+
+  <scroll-view
+    wx:if="{{viewMode === 'text'}}"
+    scroll-y
+    class="scroll"
+    scroll-top="{{scrollTop}}"
+    scroll-into-view="{{scrollIntoView}}"
+    scroll-with-animation="{{scrollIntoView !== ''}}"
+    bindscroll="onScroll"
+  >
+    <view class="paper size-{{fontSize}}">
+      <view class="book-title">{{title}}</view>
+      <view class="book-author">{{author}}</view>
+      <view class="divider"></view>
+      <block wx:for="{{paragraphs}}" wx:key="index">
+        <view id="p{{index}}" class="{{item.h ? 'head' : 'para'}}" data-idx="{{index}}" bindlongpress="onParaLongPress">{{item.t}}</view>
+      </block>
+      <view class="tail">—— 全卷终 ——</view>
+    </view>
+  </scroll-view>
+
+  <view class="toolbar" wx:if="{{viewMode === 'text'}}">
+    <view class="tool" bindtap="fontSmaller">A-</view>
+    <view class="tool" bindtap="fontBigger">A+</view>
+    <view class="tool" bindtap="toggleCatalog">目录</view>
+    <view class="tool" bindtap="toggleMarks">书签{{bookmarkCount ? '·' + bookmarkCount : ''}}</view>
+    <view class="tool" bindtap="toggleNight">{{night ? '日间' : '夜间'}}</view>
+  </view>
+
+  <view class="mask" wx:if="{{showCatalog}}" bindtap="closeCatalog"></view>
+  <view class="catalog" wx:if="{{showCatalog}}">
+    <view class="catalog-tabs">
+      <view class="ct {{catTab === 'catalog' ? 'on' : ''}}" bindtap="setCatTab" data-t="catalog">目录</view>
+      <view class="ct {{catTab === 'mark' ? 'on' : ''}}" bindtap="setCatTab" data-t="mark">书签（{{marks.length}}）</view>
+    </view>
+    <scroll-view scroll-y class="catalog-list" wx:if="{{catTab === 'catalog'}}">
+      <view
+        class="catalog-item {{item.idx === curHeadIdx ? 'active' : ''}}"
+        wx:for="{{catalog}}"
+        wx:key="idx"
+        data-idx="{{item.idx}}"
+        bindtap="goCatalog"
+      >{{item.t}}</view>
+      <view class="catalog-empty" wx:if="{{catalog.length === 0}}">本书没有识别到章节标题</view>
+    </scroll-view>
+    <scroll-view scroll-y class="catalog-list" wx:else>
+      <view class="mark-item" wx:for="{{marks}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goMark" bindlongpress="deleteMark">
+        <view class="mark-text">{{item.t}}</view>
+      </view>
+      <view class="catalog-empty" wx:if="{{marks.length === 0}}">还没有书签，长按正文段落即可添加</view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,78 @@
+<view class="page">
+  <view class="user-card">
+    <block wx:if="{{loggedIn}}">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image class="avatar" src="{{avatar || '/assets/avatar_default.png'}}" mode="aspectFill" />
+      </button>
+      <view class="user-info">
+        <input type="nickname" class="nickname" value="{{nickname}}" placeholder="点击设置昵称" bindblur="onNicknameBlur" maxlength="20" />
+        <view class="uid">ID {{openidShort}} · {{syncText}}</view>
+      </view>
+      <view class="logout-btn" bindtap="doLogout">退出</view>
+    </block>
+    <block wx:else>
+      <view class="avatar avatar-ph">未</view>
+      <view class="user-info">
+        <view class="nickname-guest">未登录</view>
+        <view class="uid">登录后同步阅读数据（生产环境）</view>
+      </view>
+      <view class="login-btn" bindtap="goLogin">微信登录</view>
+    </block>
+  </view>
+
+  <view class="stats-card">
+    <view class="stats-row">
+      <view class="stat">
+        <view class="num">{{totalHours}}</view>
+        <view class="label">累计(小时)</view>
+      </view>
+      <view class="stat">
+        <view class="num">{{totalDays}}</view>
+        <view class="label">阅读天数</view>
+      </view>
+      <view class="stat">
+        <view class="num">{{streak}}</view>
+        <view class="label">连续天数</view>
+      </view>
+      <view class="stat">
+        <view class="num">{{todayMinutes}}</view>
+        <view class="label">今日(分钟)</view>
+      </view>
+    </view>
+    <view class="chart-title">近 7 天阅读时长（分钟）</view>
+    <view class="chart">
+      <view class="bar" wx:for="{{last7}}" wx:key="index">
+        <view class="bar-min">{{item.minutes}}</view>
+        <view class="bar-inner" style="height:{{item.h}}px"></view>
+        <view class="bar-label">{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="cal-card">
+    <view class="cal-title">{{monthLabel}} · 读满 1 分钟点亮一天</view>
+    <view class="cal-grid">
+      <view class="cal-cell" wx:for="{{calendar}}" wx:key="index">
+        <view class="cal-day {{item.on ? 'on' : ''}}">{{item.d}}</view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn-main" bindtap="goImport">＋ 导入自己的书籍</button>
+  <view class="setting-row" bindtap="toggleRemind">
+    <view class="setting-label">每日阅读提醒</view>
+    <view class="setting-right">{{remind ? '已开启' : '未开启'}} ›</view>
+  </view>
+
+  <view class="section-title">我的书籍（{{customBooks.length}}）</view>
+  <view class="empty" wx:if="{{customBooks.length === 0}}">还没有自藏书。点上方按钮，从微信文件或粘贴文本导入。</view>
+  <view class="my-book" wx:for="{{customBooks}}" wx:key="id" data-id="{{item.id}}" bindtap="openBook">
+    <view class="my-book-info">
+      <view class="mb-title">{{item.title}}</view>
+      <view class="mb-sub">{{item.author}} · {{item.type}}</view>
+    </view>
+    <view class="mb-del" data-id="{{item.id}}" catchtap="deleteBook">删除</view>
+  </view>
+
+  <view class="about">灯下读书 v4 · 书库为公版古籍 · 自藏书仅存本机</view>
+</view>

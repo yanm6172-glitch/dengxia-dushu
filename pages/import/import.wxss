@@ -1,0 +1,130 @@
+.page {
+  padding: 30rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.intro {
+  font-size: 26rpx;
+  color: #8a7a5f;
+  line-height: 1.7;
+  margin-bottom: 30rpx;
+}
+.card {
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 34rpx 30rpx;
+  margin-bottom: 26rpx;
+  box-shadow: 0 2rpx 10rpx rgba(90, 70, 40, 0.08);
+}
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.card-desc {
+  font-size: 24rpx;
+  color: #9c8a6c;
+  line-height: 1.7;
+  margin: 14rpx 0 26rpx;
+}
+.btn-main {
+  background: #8c5a3c;
+  color: #fdf6e9;
+  font-size: 30rpx;
+  border-radius: 40rpx;
+  padding: 14rpx 0;
+}
+.title-input {
+  background: #f6efe2;
+  border-radius: 12rpx;
+  padding: 18rpx 22rpx;
+  font-size: 28rpx;
+  margin-bottom: 20rpx;
+}
+.content-input {
+  background: #f6efe2;
+  border-radius: 12rpx;
+  padding: 18rpx 22rpx;
+  font-size: 28rpx;
+  height: 420rpx;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 26rpx;
+  line-height: 1.8;
+}
+.tip {
+  font-size: 22rpx;
+  color: #b3a488;
+  line-height: 1.7;
+}
+.hint {
+  font-size: 24rpx;
+  color: #8c5a3c;
+  background: #f6efe2;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  line-height: 1.7;
+  margin-bottom: 16rpx;
+}
+.hint.pc {
+  color: #5a6a8c;
+  border-color: #c8d2e2;
+  background: #eef1f6;
+}
+.src-guide {
+  background: #f6efe2;
+  border-radius: 12rpx;
+  padding: 18rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+.sg-title {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #6d5c42;
+  margin-bottom: 12rpx;
+}
+.sg-row {
+  display: flex;
+  margin-bottom: 12rpx;
+}
+.sg-row:last-child {
+  margin-bottom: 0;
+}
+.sg-ico {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+.sg-body {
+  flex: 1;
+}
+.sg-h {
+  font-size: 24rpx;
+  color: #3b3224;
+}
+.sg-d {
+  margin-top: 2rpx;
+  font-size: 22rpx;
+  color: #9c8a6c;
+  line-height: 1.6;
+}
+.fmt-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 24rpx;
+}
+.fmt-chip {
+  font-size: 22rpx;
+  color: #8c5a3c;
+  background: #f6efe2;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 22rpx;
+  padding: 6rpx 18rpx;
+  margin: 0 12rpx 10rpx 0;
+}
+.card-note {
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #9c8a6c;
+  line-height: 1.7;
+}

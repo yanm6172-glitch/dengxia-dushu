@@ -1,0 +1,253 @@
+.reader {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f3ead9;
+}
+.reading-header {
+  padding: 14rpx 30rpx 0;
+  background: #f3ead9;
+}
+.rh-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rh-chapter {
+  font-size: 22rpx;
+  color: #9c8a6c;
+  max-width: 70%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rh-percent {
+  font-size: 22rpx;
+  color: #a06a48;
+}
+.rh-progress {
+  margin-top: 10rpx;
+  height: 4rpx;
+  background: #e8ddc8;
+  border-radius: 2rpx;
+  overflow: hidden;
+}
+.rh-progress-inner {
+  height: 100%;
+  background: #a06a48;
+  transition: width 0.2s;
+}
+.scroll {
+  flex: 1;
+  height: 0;
+}
+.paper {
+  padding: 30rpx 44rpx 140rpx;
+  color: #3b3224;
+}
+.book-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 6rpx;
+  margin-top: 10rpx;
+}
+.book-author {
+  text-align: center;
+  font-size: 24rpx;
+  color: #9c8a6c;
+  margin-top: 12rpx;
+}
+.divider {
+  width: 64rpx;
+  height: 2rpx;
+  background: #c9b28a;
+  margin: 20rpx auto;
+}
+.para {
+  margin-top: 14rpx;
+  text-align: justify;
+  font-family: "Songti SC", "STSong", "SimSun", serif;
+}
+.size-1 .para { font-size: 30rpx; line-height: 1.9; }
+.size-2 .para { font-size: 34rpx; line-height: 2.0; }
+.size-3 .para { font-size: 38rpx; line-height: 2.1; }
+.size-4 .para { font-size: 44rpx; line-height: 2.2; }
+.head {
+  font-weight: 700;
+  margin-top: 32rpx;
+  margin-bottom: 8rpx;
+  font-size: 36rpx;
+  color: #8c5a3c;
+  font-family: "Songti SC", "STSong", serif;
+}
+.tail {
+  text-align: center;
+  color: #b3a488;
+  margin: 80rpx 0 20rpx;
+  font-size: 24rpx;
+}
+.toolbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  background: #fdfaf3;
+  border-top: 1rpx solid #e5d9c3;
+  padding: 16rpx 20rpx calc(16rpx + env(safe-area-inset-bottom));
+  z-index: 10;
+}
+.tool {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  color: #6d5c42;
+}
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
+.catalog {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fdfaf3;
+  border-radius: 24rpx 24rpx 0 0;
+  z-index: 30;
+  padding: 20rpx 30rpx 0;
+  box-sizing: border-box;
+}
+.catalog-tabs {
+  display: flex;
+  margin-bottom: 16rpx;
+}
+.ct {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  color: #9c8a6c;
+  padding: 12rpx 0;
+  border-bottom: 3rpx solid transparent;
+}
+.ct.on {
+  color: #8c5a3c;
+  font-weight: 600;
+  border-bottom-color: #8c5a3c;
+}
+.catalog-list {
+  height: 46vh;
+}
+.catalog-item {
+  padding: 16rpx 4rpx;
+  border-bottom: 1rpx solid #efe5d2;
+  font-size: 28rpx;
+  color: #5a4c35;
+}
+.catalog-item.active {
+  color: #8c5a3c;
+  font-weight: 600;
+}
+.mark-item {
+  padding: 18rpx 4rpx;
+  border-bottom: 1rpx solid #efe5d2;
+}
+.mark-text {
+  font-size: 26rpx;
+  color: #5a4c35;
+  line-height: 1.6;
+}
+.catalog-empty {
+  text-align: center;
+  color: #b3a488;
+  font-size: 24rpx;
+  padding: 40rpx 0;
+}
+.night {
+  background: #1c1a16;
+}
+.night .reading-header {
+  background: #1c1a16;
+}
+.night .rh-chapter {
+  color: #8d8372;
+}
+.night .rh-progress {
+  background: #3a342a;
+}
+.night .paper {
+  color: #d8cfc0;
+}
+.night .head {
+  color: #c99b6e;
+}
+.night .toolbar {
+  background: #26221b;
+  border-top-color: #3a342a;
+}
+.night .tool {
+  color: #b9ad97;
+}
+.night .catalog {
+  background: #26221b;
+}
+.night .ct {
+  color: #8d8372;
+}
+.night .ct.on {
+  color: #c99b6e;
+  border-bottom-color: #c99b6e;
+}
+.night .catalog-item,
+.night .mark-text {
+  color: #b9ad97;
+  border-bottom-color: #3a342a;
+}
+.night .catalog-item.active {
+  color: #c99b6e;
+}
+.doc-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+.doc-icon {
+  font-size: 120rpx;
+}
+.doc-title {
+  margin-top: 30rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #3b3224;
+}
+.doc-author {
+  margin-top: 10rpx;
+  font-size: 24rpx;
+  color: #9c8a6c;
+}
+.doc-desc {
+  margin-top: 30rpx;
+  font-size: 24rpx;
+  color: #8a7a5f;
+}
+.doc-btn {
+  margin-top: 40rpx;
+  background: #8c5a3c;
+  color: #fdf6e9;
+  font-size: 30rpx;
+  border-radius: 40rpx;
+  padding: 14rpx 80rpx;
+}
+.night .doc-title {
+  color: #d8cfc0;
+}

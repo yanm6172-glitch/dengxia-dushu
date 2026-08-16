@@ -1,0 +1,62 @@
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">灯下读书</view>
+    <view class="hero-sub">每日 25 分钟古籍日课 · 已开卷 {{readCount}} 本</view>
+  </view>
+
+  <view class="day-strip">
+    <text class="day-item">今日已读 {{todayMinutes}} 分钟</text>
+    <text class="day-dot">·</text>
+    <text class="day-item">连续 {{streak}} 天</text>
+  </view>
+
+  <view class="last-card" wx:if="{{lastBook}}" bindtap="continueLast">
+    <view class="cover {{lastBook.color}}">{{lastBook.firstChar}}</view>
+    <view class="last-info">
+      <view class="last-title">接着读《{{lastBook.title}}》</view>
+      <view class="last-sub">{{lastBook.author}} · 已读 {{lastBook.percent}}%</view>
+      <view class="last-progress"><view class="last-progress-inner" style="width:{{lastBook.percent}}%"></view></view>
+    </view>
+    <button class="btn-read" catchtap="continueLast">继续读书</button>
+  </view>
+
+  <view class="import-bar" bindtap="goImport">
+    <text class="import-plus">＋</text>
+    <text class="import-text">导入自己的书籍（txt 文件 / 粘贴文本）</text>
+    <text class="import-arrow">›</text>
+  </view>
+
+  <view class="search-box">
+    <text class="search-icon">🔍</text>
+    <input class="search-input" placeholder="搜索书名或作者" value="{{searchKey}}" bindinput="onSearch" />
+  </view>
+
+  <view class="quote-card" wx:if="{{quote}}">
+    <view class="quote-text">「{{quote.text}}」</view>
+    <view class="quote-src">——《{{quote.book}}》</view>
+    <button class="btn-primary" bindtap="openQuoteBook">立即读书</button>
+  </view>
+
+  <view class="section" wx:for="{{grouped}}" wx:key="name" wx:for-item="group">
+    <view class="section-title">{{group.name}}</view>
+    <view class="book-card" wx:for="{{group.books}}" wx:key="id" data-id="{{item.id}}" bindlongpress="deleteBook">
+      <view class="cover {{item.color}}">{{item.firstChar}}</view>
+      <view class="book-main">
+        <view class="book-title-line">
+          <text class="book-title">{{item.title}}</text>
+          <text class="tag" wx:if="{{item.custom}}">自藏</text>
+        </view>
+        <view class="book-author">{{item.author}}{{item.custom ? ' · ' + item.type : ''}}</view>
+        <view class="progress" wx:if="{{item.started}}">
+          <view class="progress-bar">
+            <view class="progress-inner" style="width:{{item.percent}}%"></view>
+          </view>
+          <text class="progress-text">已读 {{item.percent}}%</text>
+        </view>
+      </view>
+      <button class="btn-read" bindtap="openBook" data-id="{{item.id}}">{{item.started ? '继续读书' : '立即读书'}}</button>
+    </view>
+  </view>
+
+  <view class="footer">书库为公版古籍 · 长按「自藏」书可删除</view>
+</view>
