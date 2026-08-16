@@ -147,6 +147,16 @@ App({
     s.days[key] = (s.days[key] || 0) + sec;
     try { wx.setStorageSync('reading_stats', s); } catch (e) {}
     this.scheduleCloudPush('stats');
+    const goal = this.getReadingGoal();
+    return (s.days[key] || 0) >= goal * 60;
+  },
+  getReadingGoal() {
+    try {
+      const g = wx.getStorageSync('reading_goal');
+      return g ? Number(g) : 25;
+    } catch (e) {
+      return 25;
+    }
   },
   getReadingStats() {
     const s = this.globalData.stats;

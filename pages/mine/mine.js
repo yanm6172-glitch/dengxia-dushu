@@ -10,6 +10,7 @@ Page({
     todayMinutes: 0,
     last7: [],
     customBooks: [],
+    goalMinutes: 25,
     loggedIn: false,
     nickname: '',
     avatar: '',
@@ -47,6 +48,7 @@ Page({
       todayMinutes: st.todayMinutes,
       last7,
       customBooks: app.globalData.customBooks || [],
+      goalMinutes: app.getReadingGoal(),
       loggedIn,
       nickname: (u && u.nickname) || '',
       avatar: (u && u.avatar) || '',
@@ -117,6 +119,12 @@ Page({
     }
     this.setData({ remind: next });
     try { wx.setStorageSync('remind_on', next); } catch (e) {}
+  },
+  setGoal(e) {
+    const g = Number(e.currentTarget.dataset.g);
+    try { wx.setStorageSync('reading_goal', g); } catch (err) {}
+    this.refresh();
+    wx.showToast({ title: '目标已设为 ' + g + ' 分钟', icon: 'none' });
   },
   goImport() {
     wx.navigateTo({ url: '/pages/import/import' });

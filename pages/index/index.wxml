@@ -5,7 +5,11 @@
   </view>
 
   <view class="day-strip">
-    <text class="day-item">今日已读 {{todayMinutes}} 分钟</text>
+    <text class="day-item">今日 {{todayMinutes}}/{{goalMinutes}} 分钟</text>
+    <view class="goal-bar">
+      <view class="goal-inner" style="width:{{goalPercent}}%"></view>
+    </view>
+    <text class="day-item" wx:if="{{goalDone}}">🎉</text>
     <text class="day-dot">·</text>
     <text class="day-item">连续 {{streak}} 天</text>
   </view>

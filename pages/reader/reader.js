@@ -1,6 +1,7 @@
 const booksData = require('../../utils/books.js');
 const app = getApp();
 
+// ---------- 文件读取 ----------
 function readFile(filePath) {
   return new Promise((resolve, reject) => {
     wx.getFileSystemManager().readFile({
@@ -12,7 +13,6 @@ function readFile(filePath) {
   });
 }
 
-// 按二进制读取（EPUB 解析用）
 function readFileBinary(filePath) {
   return new Promise((resolve, reject) => {
     wx.getFileSystemManager().readFile({
@@ -23,9 +23,6 @@ function readFileBinary(filePath) {
   });
 }
 
-
-
-// 自藏书：优先读本地文件；本地缺失且有云端副本时从云存储下载
 function ensureCustomFile(book) {
   if (!book.cloudFileID) return Promise.resolve(book.file);
   const fs = wx.getFileSystemManager();
@@ -43,6 +40,7 @@ function ensureCustomFile(book) {
   });
 }
 
+// ---------- 文本解析 ----------
 function isHeading(s) {
   if (!s || s.length > 30) return false;
   if (/^[【●■□]/.test(s)) return true;
@@ -56,7 +54,6 @@ function isHeading(s) {
   return false;
 }
 
-// 把被并入长行的章节标记（●卷一 / 【篇名】）重新拆成独立行
 function splitMarks(line) {
   if (line.indexOf('●') < 0 && line.indexOf('【') < 0) return [line];
   return line.split(/(?=[●【])/).map((p) => p.trim()).filter((p) => p);
@@ -111,6 +108,12 @@ function cleanText(raw) {
   return out;
 }
 
+const SPEEDS = [
+  { step: 3, name: '慢' },
+  { step: 7, name: '中' },
+  { step: 14, name: '快' }
+];
+
 Page({
   data: {
     title: '',
@@ -119,7 +122,8 @@ Page({
     catalog: [],
     marks: [],
     fontSize: 2,
-    night: false,
+    theme: 'paper',
+    font: 'song',
     percent: 0,
     scrollTop: 0,
     scrollIntoView: '',
@@ -128,17 +132,26 @@ Page({
     currentChapter: '',
     curHeadIdx: -1,
     bookmarkCount: 0,
-    viewMode: 'text'
+    viewMode: 'text',
+    chrome: true,
+    autoOn: false,
+    autoLabel: '自动',
+    showSearch: false,
+    searchKey: '',
+    searchResults: [],
+    hitIdx: -1,
+    showTheme: false,
+    showShare: false,
+    shareImage: ''
   },
   onLoad(options) {
     const id = options && options.id;
-    const book = booksData.list.find(b => b.id === id) || (app.globalData.customBooks || []).find(b => b.id === id);
+    const book = booksData.list.find((b) => b.id === id) || (app.globalData.customBooks || []).find((b) => b.id === id);
     if (!book) {
       wx.showToast({ title: '未找到这本书', icon: 'none' });
       return;
     }
     this.book = book;
-    // PDF / 办公文档：微信内置阅读器打开
     const fmt = require('../../services/formats.js');
     if (fmt.isDocType(book.type)) {
       this.setData({ viewMode: 'doc', title: book.title, author: book.author });
@@ -146,8 +159,9 @@ Page({
       return;
     }
     const fontSize = wx.getStorageSync('reader_fontsize') || 2;
-    const night = wx.getStorageSync('reader_night') || false;
-    this.setData({ title: book.title, author: book.author, fontSize, night });
+    const theme = wx.getStorageSync('reader_theme') || 'paper';
+    const font = wx.getStorageSync('reader_font') || 'song';
+    this.setData({ viewMode: 'text', title: book.title, author: book.author, fontSize, theme, font });
     wx.setNavigationBarTitle({ title: book.title });
     this.loadMarks();
     this.loadBook(book);
@@ -159,7 +173,9 @@ Page({
     if (this._sessionStart) {
       const sec = Math.round((Date.now() - this._sessionStart) / 1000);
       this._sessionStart = null;
-      if (sec > 0) app.addReadingSeconds(sec);
+      if (sec > 0 && app.addReadingSeconds(sec)) {
+        wx.showToast({ title: '🎉 今日日课完成', icon: 'none' });
+      }
     }
   },
   loadMarks() {
@@ -182,6 +198,7 @@ Page({
         paragraphs.push({ t: lines[i], h });
       }
       that.headings = catalog;
+      that._paragraphs = paragraphs;
       const finish = () => {
         const p = app.getProgress(book.id);
         if (p && p.scrollTop > 0) {
@@ -192,7 +209,6 @@ Page({
         }
         wx.hideLoading();
       };
-      // 分批渲染：首屏先出 800 段，其余每 60ms 追加一批
       const CHUNK = 800;
       that.setData({ paragraphs: paragraphs.slice(0, CHUNK), catalog }, () => {
         if (paragraphs.length <= CHUNK) { finish(); return; }
@@ -214,15 +230,13 @@ Page({
     };
     const fail = (e) => {
       wx.hideLoading();
-      const msg = (e && e.errMsg) ? e.errMsg : String(e);
       wx.showModal({
         title: '打开失败',
-        content: msg + '\n文件: ' + book.file,
+        content: (e && e.errMsg) ? e.errMsg : String(e),
         showCancel: false
       });
     };
     if (book.custom) {
-      // 自藏书：EPUB 走解析器，其余文本类直接读
       const fmt = require('../../services/formats.js');
       if (book.type === 'epub') {
         ensureCustomFile(book)
@@ -234,7 +248,6 @@ Page({
       }
       return;
     }
-    // 内置公版书：从压缩数据模块直接解压（require 加载，不依赖文件系统）
     try {
       const raw = booksData.getText(book.id);
       if (!raw) {
@@ -250,7 +263,6 @@ Page({
     this.openDocumentBook(this.book);
   },
   openDocumentBook(book) {
-    const that = this;
     if (!book || !book.file) return;
     const doOpen = (path) => {
       const opt = {
@@ -275,6 +287,7 @@ Page({
       doOpen(book.file);
     }
   },
+  // ---------- 滚动 ----------
   onScroll(e) {
     const d = e.detail;
     this.lastScroll = d;
@@ -311,44 +324,98 @@ Page({
       updatedAt: Date.now()
     });
   },
-  onParaLongPress(e) {
-    const idx = e.currentTarget.dataset.idx;
-    const para = this.data.paragraphs[idx];
-    if (!para) return;
-    const that = this;
-    wx.showActionSheet({
-      itemList: ['复制本段', '添加书签'],
-      success(res) {
-        if (res.tapIndex === 0) {
-          wx.setClipboardData({ data: para.t });
-        } else if (res.tapIndex === 1) {
-          const marks = that.data.marks.slice();
-          const exists = marks.some(m => m.idx === idx);
-          if (exists) {
-            wx.showToast({ title: '已在书签中', icon: 'none' });
-            return;
-          }
-          marks.push({
-            idx,
-            t: para.t.slice(0, 24) + (para.t.length > 24 ? '…' : ''),
-            ts: Date.now()
-          });
-          marks.sort((a, b) => a.idx - b.idx);
-          that.setData({ marks, bookmarkCount: marks.length });
-          that.saveMarks();
-          wx.showToast({ title: '已加入书签', icon: 'success' });
-        }
+  toggleChrome() {
+    this.setData({ chrome: !this.data.chrome });
+  },
+  scrollToTop() {
+    this.setData({ scrollTop: 0, scrollIntoView: '' });
+    this.lastScroll = null;
+  },
+  // ---------- 自动滚动 ----------
+  cycleAuto() {
+    if (!this.data.autoOn) {
+      this.startAuto(0);
+      return;
+    }
+    const next = this._autoLevel + 1;
+    if (next >= SPEEDS.length) {
+      this.stopAuto();
+    } else {
+      this.startAuto(next);
+    }
+  },
+  startAuto(level) {
+    this.stopAuto();
+    const sp = SPEEDS[level];
+    this._autoLevel = level;
+    this._step = sp.step;
+    this.setData({ autoOn: true, autoLabel: '自动·' + sp.name });
+    this._autoTimer = setInterval(() => {
+      const d = this.lastScroll || {};
+      const st = (d.scrollTop || 0) + this._step;
+      const sh = d.scrollHeight || 0;
+      if (sh && st >= sh - 700) {
+        this.stopAuto();
+        wx.showToast({ title: '已到文末', icon: 'none' });
+        return;
       }
+      this.setData({ scrollTop: st });
+    }, 50);
+  },
+  stopAuto() {
+    if (this._autoTimer) clearInterval(this._autoTimer);
+    this._autoTimer = null;
+    this.setData({ autoOn: false, autoLabel: '自动' });
+  },
+  // ---------- 搜索 ----------
+  toggleSearch() {
+    this.setData({
+      showSearch: !this.data.showSearch,
+      showCatalog: false,
+      showTheme: false,
+      searchKey: '',
+      searchResults: []
     });
   },
+  onSearchInput(e) {
+    const k = (e.detail.value || '').trim();
+    this.setData({ searchKey: k });
+    this.runSearch(k);
+  },
+  runSearch(k) {
+    if (!k) {
+      this.setData({ searchResults: [] });
+      return;
+    }
+    const paras = this._paragraphs || [];
+    const lower = k.toLowerCase();
+    const out = [];
+    for (let i = 0; i < paras.length && out.length < 50; i++) {
+      const t = paras[i].t || '';
+      const idx = t.toLowerCase().indexOf(lower);
+      if (idx >= 0) {
+        const start = Math.max(0, idx - 12);
+        const tail = idx + lower.length + 20;
+        const snip = (start > 0 ? '…' : '') + t.slice(start, tail) + (tail < t.length ? '…' : '');
+        out.push({ idx: i, snippet: snip, head: paras[i].h });
+      }
+    }
+    this.setData({ searchResults: out });
+  },
+  gotoResult(e) {
+    const idx = e.currentTarget.dataset.idx;
+    this.setData({ showSearch: false, scrollIntoView: 'p' + idx, hitIdx: idx });
+    setTimeout(() => this.setData({ hitIdx: -1 }), 2000);
+  },
+  // ---------- 目录 / 书签 ----------
   setCatTab(e) {
     this.setData({ catTab: e.currentTarget.dataset.t });
   },
   toggleCatalog() {
-    this.setData({ showCatalog: !this.data.showCatalog, catTab: 'catalog' });
+    this.setData({ showCatalog: !this.data.showCatalog, catTab: 'catalog', showTheme: false, showSearch: false });
   },
   toggleMarks() {
-    this.setData({ showCatalog: !this.data.showCatalog, catTab: 'mark' });
+    this.setData({ showCatalog: !this.data.showCatalog, catTab: 'mark', showTheme: false, showSearch: false });
   },
   closeCatalog() {
     this.setData({ showCatalog: false });
@@ -363,11 +430,157 @@ Page({
   },
   deleteMark(e) {
     const idx = e.currentTarget.dataset.idx;
-    const marks = this.data.marks.filter(m => m.idx !== idx);
+    const marks = this.data.marks.filter((m) => m.idx !== idx);
     this.setData({ marks, bookmarkCount: marks.length });
     this.saveMarks();
     wx.showToast({ title: '书签已删除', icon: 'none' });
   },
+  // ---------- 主题 / 字体 ----------
+  toggleThemePanel() {
+    this.setData({ showTheme: !this.data.showTheme, showCatalog: false, showSearch: false });
+  },
+  closePanels() {
+    this.setData({ showTheme: false });
+  },
+  pickTheme(e) {
+    const t = e.currentTarget.dataset.t;
+    this.setData({ theme: t, showTheme: false });
+    wx.setStorageSync('reader_theme', t);
+  },
+  pickFont(e) {
+    const f = e.currentTarget.dataset.f;
+    this.setData({ font: f });
+    wx.setStorageSync('reader_font', f);
+  },
+  // ---------- 书摘卡 ----------
+  makeShareCard(idx) {
+    const para = this.data.paragraphs[idx];
+    if (!para || !para.t) return;
+    this._shareText = para.t.slice(0, 120);
+    this._shareSource = this.data.title;
+    this.setData({ showShare: true, shareImage: '' });
+    wx.nextTick(() => this.drawShareCard());
+  },
+  drawShareCard() {
+    const that = this;
+    wx.createSelectorQuery().in(this).select('#shareCanvas').fields({ node: true, size: true }).exec((res) => {
+      if (!res || !res[0] || !res[0].node) return;
+      const canvas = res[0].node;
+      const w = 300;
+      const h = 400;
+      const dpr = (wx.getSystemInfoSync().pixelRatio) || 2;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = '#f7f1e0';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#8c5a3c';
+      ctx.fillRect(0, 0, w, 8);
+      ctx.fillStyle = '#c9b28a';
+      ctx.font = 'bold 56px serif';
+      ctx.fillText('\u201C', 18, 74);
+      ctx.fillStyle = '#3b3224';
+      ctx.font = '17px "Songti SC","STSong","SimSun",serif';
+      const maxW = w - 56;
+      const lines = [];
+      let line = '';
+      const text = this._shareText || '';
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (line && ctx.measureText(line + ch).width > maxW) {
+          lines.push(line);
+          line = ch;
+        } else {
+          line += ch;
+        }
+        if (lines.length >= 8) break;
+      }
+      if (lines.length < 8 && line) lines.push(line);
+      let y = 100;
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], 28, y);
+        y += 34;
+      }
+      ctx.fillStyle = '#8c5a3c';
+      ctx.font = '13px sans-serif';
+      ctx.fillText('—— 《' + (this._shareSource || '灯下读书') + '》', 28, y + 20);
+      ctx.fillStyle = '#b3a488';
+      ctx.font = '11px sans-serif';
+      const d2 = new Date();
+      const ds = d2.getFullYear() + '-' + ('0' + (d2.getMonth() + 1)).slice(-2) + '-' + ('0' + d2.getDate()).slice(-2);
+      ctx.fillText('灯下读书 · ' + ds, 28, h - 26);
+      ctx.fillStyle = '#c9b28a';
+      ctx.fillRect(0, h - 8, w, 8);
+      wx.canvasToTempFilePath({
+        canvas,
+        success(r) {
+          that.setData({ shareImage: r.tempFilePath });
+        },
+        fail() {
+          wx.showToast({ title: '生成失败，请重试', icon: 'none' });
+        }
+      }, that);
+    });
+  },
+  saveShareImage() {
+    if (!this.data.shareImage) return;
+    const that = this;
+    wx.saveImageToPhotosAlbum({
+      filePath: this.data.shareImage,
+      success() {
+        wx.showToast({ title: '已保存到相册', icon: 'success' });
+      },
+      fail() {
+        wx.showModal({
+          title: '需要相册权限',
+          content: '请在设置中允许保存到相册',
+          confirmText: '去设置',
+          success(r) {
+            if (r.confirm) wx.openSetting();
+          }
+        });
+      }
+    });
+  },
+  closeShare() {
+    this.setData({ showShare: false });
+  },
+  noop() {},
+  // ---------- 段落长按 ----------
+  onParaLongPress(e) {
+    const idx = e.currentTarget.dataset.idx;
+    const para = this.data.paragraphs[idx];
+    if (!para) return;
+    const that = this;
+    wx.showActionSheet({
+      itemList: ['复制本段', '添加书签', '生成书摘卡'],
+      success(res) {
+        if (res.tapIndex === 0) {
+          wx.setClipboardData({ data: para.t });
+        } else if (res.tapIndex === 1) {
+          const marks = that.data.marks.slice();
+          const exists = marks.some((m) => m.idx === idx);
+          if (exists) {
+            wx.showToast({ title: '已在书签中', icon: 'none' });
+            return;
+          }
+          marks.push({
+            idx,
+            t: para.t.slice(0, 24) + (para.t.length > 24 ? '…' : ''),
+            ts: Date.now()
+          });
+          marks.sort((a, b) => a.idx - b.idx);
+          that.setData({ marks, bookmarkCount: marks.length });
+          that.saveMarks();
+          wx.showToast({ title: '已加入书签', icon: 'success' });
+        } else if (res.tapIndex === 2) {
+          that.makeShareCard(idx);
+        }
+      }
+    });
+  },
+  // ---------- 字号 ----------
   fontSmaller() {
     const v = Math.max(1, this.data.fontSize - 1);
     this.setData({ fontSize: v });
@@ -378,18 +591,15 @@ Page({
     this.setData({ fontSize: v });
     wx.setStorageSync('reader_fontsize', v);
   },
-  toggleNight() {
-    const night = !this.data.night;
-    this.setData({ night });
-    wx.setStorageSync('reader_night', night);
-  },
   onHide() {
     this.endSession();
     this.saveProgress();
+    this.stopAuto();
   },
   onUnload() {
     this.endSession();
     this.saveProgress();
+    this.stopAuto();
   },
   onShareAppMessage() {
     return {

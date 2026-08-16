@@ -20,7 +20,10 @@ Page({
     searchKey: '',
     lastBook: null,
     todayMinutes: 0,
-    streak: 0
+    streak: 0,
+    goalMinutes: 25,
+    goalPercent: 0,
+    goalDone: false
   },
   onShow() {
     this.refresh();
@@ -80,10 +83,14 @@ Page({
 
     const day = Math.floor(Date.now() / 86400000);
     const quote = quotesData.quotes[day % quotesData.quotes.length];
+    const goal = app.getReadingGoal();
     this.setData({
       grouped, quote, readCount, lastBook,
       todayMinutes: st.todayMinutes,
-      streak: st.streak
+      streak: st.streak,
+      goalMinutes: goal,
+      goalPercent: Math.min(100, Math.round(st.todayMinutes / goal * 100)),
+      goalDone: st.todayMinutes >= goal
     });
   },
   onSearch(e) {

@@ -1,4 +1,5 @@
-<view class="reader {{night ? 'night' : ''}}">
+<view class="reader theme-{{theme}} font-{{font}}">
+  <!-- 文档模式 -->
   <view class="doc-panel" wx:if="{{viewMode === 'doc'}}">
     <view class="doc-icon">📄</view>
     <view class="doc-title">{{title}}</view>
@@ -7,65 +8,133 @@
     <button class="doc-btn" bindtap="openDoc">打开文档</button>
   </view>
 
-  <view class="reading-header" wx:if="{{viewMode === 'text'}}">
-    <view class="rh-line">
-      <text class="rh-chapter">{{currentChapter || title}}</text>
-      <text class="rh-percent">{{percent}}%</text>
-    </view>
-    <view class="rh-progress">
-      <view class="rh-progress-inner" style="width:{{percent}}%"></view>
-    </view>
-  </view>
-
-  <scroll-view
-    wx:if="{{viewMode === 'text'}}"
-    scroll-y
-    class="scroll"
-    scroll-top="{{scrollTop}}"
-    scroll-into-view="{{scrollIntoView}}"
-    scroll-with-animation="{{scrollIntoView !== ''}}"
-    bindscroll="onScroll"
-  >
-    <view class="paper size-{{fontSize}}">
-      <view class="book-title">{{title}}</view>
-      <view class="book-author">{{author}}</view>
-      <view class="divider"></view>
-      <block wx:for="{{paragraphs}}" wx:key="index">
-        <view id="p{{index}}" class="{{item.h ? 'head' : 'para'}}" data-idx="{{index}}" bindlongpress="onParaLongPress">{{item.t}}</view>
-      </block>
-      <view class="tail">—— 全卷终 ——</view>
-    </view>
-  </scroll-view>
-
-  <view class="toolbar" wx:if="{{viewMode === 'text'}}">
-    <view class="tool" bindtap="fontSmaller">A-</view>
-    <view class="tool" bindtap="fontBigger">A+</view>
-    <view class="tool" bindtap="toggleCatalog">目录</view>
-    <view class="tool" bindtap="toggleMarks">书签{{bookmarkCount ? '·' + bookmarkCount : ''}}</view>
-    <view class="tool" bindtap="toggleNight">{{night ? '日间' : '夜间'}}</view>
-  </view>
-
-  <view class="mask" wx:if="{{showCatalog}}" bindtap="closeCatalog"></view>
-  <view class="catalog" wx:if="{{showCatalog}}">
-    <view class="catalog-tabs">
-      <view class="ct {{catTab === 'catalog' ? 'on' : ''}}" bindtap="setCatTab" data-t="catalog">目录</view>
-      <view class="ct {{catTab === 'mark' ? 'on' : ''}}" bindtap="setCatTab" data-t="mark">书签（{{marks.length}}）</view>
-    </view>
-    <scroll-view scroll-y class="catalog-list" wx:if="{{catTab === 'catalog'}}">
-      <view
-        class="catalog-item {{item.idx === curHeadIdx ? 'active' : ''}}"
-        wx:for="{{catalog}}"
-        wx:key="idx"
-        data-idx="{{item.idx}}"
-        bindtap="goCatalog"
-      >{{item.t}}</view>
-      <view class="catalog-empty" wx:if="{{catalog.length === 0}}">本书没有识别到章节标题</view>
-    </scroll-view>
-    <scroll-view scroll-y class="catalog-list" wx:else>
-      <view class="mark-item" wx:for="{{marks}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goMark" bindlongpress="deleteMark">
-        <view class="mark-text">{{item.t}}</view>
+  <block wx:if="{{viewMode === 'text'}}">
+    <!-- 顶部状态条 -->
+    <view class="reading-header" wx:if="{{chrome}}">
+      <view class="rh-line">
+        <text class="rh-chapter">{{currentChapter || title}}</text>
+        <text class="rh-percent">{{percent}}%</text>
       </view>
-      <view class="catalog-empty" wx:if="{{marks.length === 0}}">还没有书签，长按正文段落即可添加</view>
+      <view class="rh-progress">
+        <view class="rh-progress-inner" style="width:{{percent}}%"></view>
+      </view>
+    </view>
+
+    <!-- 搜索条 -->
+    <view class="search-bar" wx:if="{{chrome && showSearch}}">
+      <text class="search-ico">🔍</text>
+      <input class="search-input" placeholder="搜索本书…" value="{{searchKey}}" bindinput="onSearchInput" focus="{{showSearch}}" />
+      <text class="search-count" wx:if="{{searchKey}}">{{searchResults.length}} 处</text>
+      <text class="search-close" bindtap="toggleSearch">✕</text>
+    </view>
+
+    <!-- 正文 -->
+    <scroll-view
+      wx:if="{{viewMode === 'text'}}"
+      scroll-y
+      class="scroll"
+      scroll-top="{{scrollTop}}"
+      scroll-into-view="{{scrollIntoView}}"
+      scroll-with-animation="{{scrollIntoView !== ''}}"
+      bindscroll="onScroll"
+    >
+      <view class="paper size-{{fontSize}}" bindtap="toggleChrome">
+        <view class="book-title">{{title}}</view>
+        <view class="book-author">{{author}}</view>
+        <view class="divider"></view>
+        <block wx:for="{{paragraphs}}" wx:key="index">
+          <view id="p{{index}}" class="{{item.h ? 'head' : 'para'}} {{index === hitIdx ? 'hit' : ''}}" data-idx="{{index}}" bindlongpress="onParaLongPress">{{item.t}}</view>
+        </block>
+        <view class="tail">—— 全卷终 ——</view>
+      </view>
     </scroll-view>
-  </view>
+
+    <!-- 悬浮回顶 -->
+    <view class="float-top" wx:if="{{chrome && percent > 2}}" bindtap="scrollToTop">↑</view>
+
+    <!-- 沉浸提示 -->
+    <view class="chrome-hint" wx:if="{{!chrome}}">轻点正文呼出工具</view>
+
+    <!-- 底部工具栏 -->
+    <view class="toolbar" wx:if="{{chrome}}">
+      <view class="tool" bindtap="fontSmaller">A-</view>
+      <view class="tool" bindtap="fontBigger">A+</view>
+      <view class="tool" bindtap="toggleCatalog">目录</view>
+      <view class="tool" bindtap="toggleMarks">书签·{{bookmarkCount}}</view>
+      <view class="tool" bindtap="toggleSearch">搜索</view>
+      <view class="tool auto {{autoOn ? 'on' : ''}}" bindtap="cycleAuto">{{autoLabel}}</view>
+      <view class="tool" bindtap="toggleThemePanel">主题</view>
+    </view>
+
+    <!-- 搜索结果面板 -->
+    <view class="mask" wx:if="{{showSearch && searchResults.length}}" bindtap="toggleSearch"></view>
+    <view class="bottom-panel search-panel" wx:if="{{showSearch && searchResults.length}}">
+      <view class="panel-title">搜索结果（{{searchResults.length}}）</view>
+      <scroll-view scroll-y class="panel-list">
+        <view class="search-item" wx:for="{{searchResults}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="gotoResult">
+          <text class="si-head" wx:if="{{item.head}}">〔{{item.head}}〕</text>
+          <text class="si-snip">{{item.snippet}}</text>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="search-empty" wx:if="{{showSearch && searchKey && searchResults.length === 0}}">未找到「{{searchKey}}」</view>
+
+    <!-- 目录 / 书签面板 -->
+    <view class="mask" wx:if="{{showCatalog}}" bindtap="closeCatalog"></view>
+    <view class="bottom-panel catalog" wx:if="{{showCatalog}}">
+      <view class="catalog-tabs">
+        <view class="ct {{catTab === 'catalog' ? 'on' : ''}}" bindtap="setCatTab" data-t="catalog">目录</view>
+        <view class="ct {{catTab === 'mark' ? 'on' : ''}}" bindtap="setCatTab" data-t="mark">书签（{{marks.length}}）</view>
+      </view>
+      <scroll-view scroll-y class="panel-list" wx:if="{{catTab === 'catalog'}}">
+        <view class="catalog-item {{item.idx === curHeadIdx ? 'active' : ''}}" wx:for="{{catalog}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goCatalog">{{item.t}}</view>
+        <view class="catalog-empty" wx:if="{{catalog.length === 0}}">本书没有识别到章节标题</view>
+      </scroll-view>
+      <scroll-view scroll-y class="panel-list" wx:else>
+        <view class="mark-item" wx:for="{{marks}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goMark" bindlongpress="deleteMark">
+          <view class="mark-text">{{item.t}}</view>
+        </view>
+        <view class="catalog-empty" wx:if="{{marks.length === 0}}">还没有书签，长按正文段落即可添加</view>
+      </scroll-view>
+    </view>
+
+    <!-- 主题面板 -->
+    <view class="mask" wx:if="{{showTheme}}" bindtap="closePanels"></view>
+    <view class="bottom-panel theme-panel" wx:if="{{showTheme}}">
+      <view class="panel-title">阅读主题</view>
+      <view class="theme-row">
+        <view class="theme-item {{theme === 'paper' ? 'on' : ''}}" data-t="paper" bindtap="pickTheme">
+          <view class="sw sw-paper"></view><text>米白</text>
+        </view>
+        <view class="theme-item {{theme === 'rice' ? 'on' : ''}}" data-t="rice" bindtap="pickTheme">
+          <view class="sw sw-rice"></view><text>宣纸</text>
+        </view>
+        <view class="theme-item {{theme === 'green' ? 'on' : ''}}" data-t="green" bindtap="pickTheme">
+          <view class="sw sw-green"></view><text>护眼</text>
+        </view>
+        <view class="theme-item {{theme === 'night' ? 'on' : ''}}" data-t="night" bindtap="pickTheme">
+          <view class="sw sw-night"></view><text>夜间</text>
+        </view>
+      </view>
+      <view class="panel-title">字体</view>
+      <view class="font-row">
+        <view class="font-item {{font === 'song' ? 'on' : ''}}" data-f="song" bindtap="pickFont">宋体</view>
+        <view class="font-item {{font === 'kai' ? 'on' : ''}}" data-f="kai" bindtap="pickFont">楷体</view>
+        <view class="font-item {{font === 'hei' ? 'on' : ''}}" data-f="hei" bindtap="pickFont">黑体</view>
+      </view>
+    </view>
+
+    <!-- 书摘卡 -->
+    <view class="mask share-mask" wx:if="{{showShare}}" bindtap="closeShare"></view>
+    <view class="share-overlay" wx:if="{{showShare}}" catchtap="noop">
+      <view class="share-title">书摘卡</view>
+      <image wx:if="{{shareImage}}" class="share-img" src="{{shareImage}}" mode="widthFix" />
+      <view wx:else class="share-loading">正在生成…</view>
+      <view class="share-btns">
+        <button class="share-btn save" bindtap="saveShareImage" disabled="{{!shareImage}}">保存到相册</button>
+        <button class="share-btn close" bindtap="closeShare">关闭</button>
+      </view>
+    </view>
+    <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
+  </block>
 </view>

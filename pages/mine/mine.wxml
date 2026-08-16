@@ -63,6 +63,16 @@
     <view class="setting-label">每日阅读提醒</view>
     <view class="setting-right">{{remind ? '已开启' : '未开启'}} ›</view>
   </view>
+  <view class="goal-row">
+    <view class="setting-label">每日阅读目标</view>
+    <view class="goal-chips">
+      <text class="goal-chip {{goalMinutes === 15 ? 'on' : ''}}" data-g="15" bindtap="setGoal">15</text>
+      <text class="goal-chip {{goalMinutes === 25 ? 'on' : ''}}" data-g="25" bindtap="setGoal">25</text>
+      <text class="goal-chip {{goalMinutes === 30 ? 'on' : ''}}" data-g="30" bindtap="setGoal">30</text>
+      <text class="goal-chip {{goalMinutes === 45 ? 'on' : ''}}" data-g="45" bindtap="setGoal">45</text>
+      <text class="goal-unit">分钟</text>
+    </view>
+  </view>
 
   <view class="section-title">我的书籍（{{customBooks.length}}）</view>
   <view class="empty" wx:if="{{customBooks.length === 0}}">还没有自藏书。点上方按钮，从微信文件或粘贴文本导入。</view>

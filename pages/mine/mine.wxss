@@ -247,3 +247,39 @@
 .nickname {
   width: 100%;
 }
+.goal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  margin-bottom: 18rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.goal-chips {
+  display: flex;
+  align-items: center;
+}
+.goal-chip {
+  min-width: 60rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #6d5c42;
+  background: #f6efe2;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 28rpx;
+  padding: 8rpx 18rpx;
+  margin-left: 12rpx;
+}
+.goal-chip.on {
+  background: #8c5a3c;
+  border-color: #8c5a3c;
+  color: #fdf6e9;
+  font-weight: 600;
+}
+.goal-unit {
+  font-size: 22rpx;
+  color: #9c8a6c;
+  margin-left: 10rpx;
+}
