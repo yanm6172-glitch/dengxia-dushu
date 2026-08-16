@@ -468,3 +468,21 @@
 .hl.h1 { background: #d9c7a0; }
 .hl.h2 { background: #c9a06a; }
 .hl.h3 { background: #a06a48; }
+.restore-tip {
+  font-size: 24rpx;
+  color: #9c8a6c;
+  line-height: 1.7;
+  margin-bottom: 16rpx;
+}
+.restore-input {
+  width: 100%;
+  height: 260rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  background: #f6efe2;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #3b3224;
+  margin-bottom: 20rpx;
+}

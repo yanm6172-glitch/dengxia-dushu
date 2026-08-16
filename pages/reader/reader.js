@@ -124,6 +124,8 @@ Page({
     fontSize: 2,
     theme: 'paper',
     font: 'song',
+    lineHeight: 2,
+    indent: true,
     percent: 0,
     scrollTop: 0,
     scrollIntoView: '',
@@ -168,7 +170,10 @@ Page({
     const fontSize = wx.getStorageSync('reader_fontsize') || 2;
     const theme = wx.getStorageSync('reader_theme') || 'paper';
     const font = wx.getStorageSync('reader_font') || 'song';
-    this.setData({ viewMode: 'text', title: book.title, author: book.author, fontSize, theme, font });
+    const lineHeight = wx.getStorageSync('reader_lineheight') || 2;
+    let indent = true;
+    try { const iv = wx.getStorageSync('reader_indent'); indent = (iv === '' || iv === null) ? true : !!iv; } catch (e) {}
+    this.setData({ viewMode: 'text', title: book.title, author: book.author, fontSize, theme, font, lineHeight, indent });
     wx.setNavigationBarTitle({ title: book.title });
     this.loadMarks();
     this.loadNotes();
@@ -523,6 +528,16 @@ Page({
     const f = e.currentTarget.dataset.f;
     this.setData({ font: f });
     wx.setStorageSync('reader_font', f);
+  },
+  pickLineHeight(e) {
+    const v = Number(e.currentTarget.dataset.v);
+    this.setData({ lineHeight: v });
+    wx.setStorageSync('reader_lineheight', v);
+  },
+  toggleIndent() {
+    const v = !this.data.indent;
+    this.setData({ indent: v });
+    wx.setStorageSync('reader_indent', v);
   },
   // ---------- 朗读 ----------
   speakParagraph(idx) {

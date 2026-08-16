@@ -231,6 +231,23 @@ App({
     try { data.settings.reader_font = wx.getStorageSync('reader_font') || 'song'; } catch (e) {}
     return JSON.stringify(data);
   },
+  importBackup(jsonStr) {
+    let data;
+    try { data = JSON.parse(jsonStr); } catch (e) { return { ok: false, err: 'JSON 解析失败，请检查粘贴内容' }; }
+    if (!data || (data.progress === undefined && data.stats === undefined)) {
+      return { ok: false, err: '不是有效的备份数据' };
+    }
+    if (data.progress) { this.globalData.progress = data.progress; this.saveProgress(); }
+    if (data.stats) { this.globalData.stats = data.stats; try { wx.setStorageSync('reading_stats', data.stats); } catch (e) {} }
+    if (data.bookmarks) { try { wx.setStorageSync('bookmarks', data.bookmarks); } catch (e) {} }
+    if (data.notes) { try { wx.setStorageSync('notes', data.notes); } catch (e) {} }
+    if (data.customBooks) { this.globalData.customBooks = data.customBooks; try { wx.setStorageSync('custom_books', data.customBooks); } catch (e) {} }
+    const st = data.settings || {};
+    if (st.reading_goal) { try { wx.setStorageSync('reading_goal', st.reading_goal); } catch (e) {} }
+    if (st.reader_theme) { try { wx.setStorageSync('reader_theme', st.reader_theme); } catch (e) {} }
+    if (st.reader_font) { try { wx.setStorageSync('reader_font', st.reader_font); } catch (e) {} }
+    return { ok: true };
+  },
   getReadingGoal() {
     try {
       const g = wx.getStorageSync('reading_goal');

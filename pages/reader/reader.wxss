@@ -491,3 +491,42 @@
 .nb.cancel { border: 1rpx solid #d8c6a8; color: #6d5c42; }
 .theme-night .nb.cancel { border-color: #3a342a; color: #b9ad97; }
 .nb.del { border: 1rpx solid #e0c0a8; color: #b3592f; }
+/* 排版：行距与缩进 */
+.para { text-indent: 2em; }
+.no-indent .para { text-indent: 0; }
+.lh-1 .para { line-height: 1.75; }
+.lh-2 .para { line-height: 2.0; }
+.lh-3 .para { line-height: 2.3; }
+.indent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding: 0 10rpx;
+}
+.indent-label {
+  font-size: 26rpx;
+}
+.theme-paper .indent-label, .theme-rice .indent-label { color: #6d5c42; }
+.theme-green .indent-label { color: #3c5a3c; }
+.theme-night .indent-label { color: #b9ad97; }
+.indent-switch {
+  width: 92rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  background: #e8ddc8;
+  position: relative;
+  transition: background 0.2s;
+}
+.indent-switch.on { background: #a06a48; }
+.indent-knob {
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: left 0.2s;
+}
+.indent-switch.on .indent-knob { left: 50rpx; }

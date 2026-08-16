@@ -38,7 +38,7 @@
       scroll-with-animation="{{scrollIntoView !== ''}}"
       bindscroll="onScroll"
     >
-      <view class="paper size-{{fontSize}}" bindtap="toggleChrome">
+      <view class="paper size-{{fontSize}} lh-{{lineHeight}} {{indent ? '' : 'no-indent'}}" bindtap="toggleChrome">
         <view class="book-title">{{title}}</view>
         <view class="book-author">{{author}}</view>
         <view class="divider"></view>
@@ -129,6 +129,18 @@
         <view class="font-item {{font === 'song' ? 'on' : ''}}" data-f="song" bindtap="pickFont">宋体</view>
         <view class="font-item {{font === 'kai' ? 'on' : ''}}" data-f="kai" bindtap="pickFont">楷体</view>
         <view class="font-item {{font === 'hei' ? 'on' : ''}}" data-f="hei" bindtap="pickFont">黑体</view>
+      </view>
+      <view class="panel-title">行距</view>
+      <view class="font-row">
+        <view class="font-item {{lineHeight === 1 ? 'on' : ''}}" data-v="1" bindtap="pickLineHeight">紧凑</view>
+        <view class="font-item {{lineHeight === 2 ? 'on' : ''}}" data-v="2" bindtap="pickLineHeight">标准</view>
+        <view class="font-item {{lineHeight === 3 ? 'on' : ''}}" data-v="3" bindtap="pickLineHeight">宽松</view>
+      </view>
+      <view class="indent-row">
+        <text class="indent-label">首行缩进</text>
+        <view class="indent-switch {{indent ? 'on' : ''}}" bindtap="toggleIndent">
+          <view class="indent-knob"></view>
+        </view>
       </view>
     </view>
 

@@ -29,7 +29,9 @@ Page({
     showNotes: false,
     showReport: false,
     reportImage: '',
-    heatmap: []
+    heatmap: [],
+    showRestore: false,
+    restoreDraft: ''
   },
   onShow() {
     let remind = false;
@@ -144,6 +146,39 @@ Page({
       cols.push(col);
     }
     return cols;
+  },
+  openRestore() {
+    this.setData({ showRestore: true });
+  },
+  closeRestore() {
+    this.setData({ showRestore: false, restoreDraft: '' });
+  },
+  onRestoreInput(e) {
+    this.setData({ restoreDraft: e.detail.value });
+  },
+  doRestore() {
+    const json = this.data.restoreDraft.trim();
+    if (!json) {
+      wx.showToast({ title: '请先粘贴备份文本', icon: 'none' });
+      return;
+    }
+    const that = this;
+    wx.showModal({
+      title: '恢复数据',
+      content: '将覆盖当前阅读数据（进度/统计/书签/笔记/设置），确定继续吗？',
+      confirmColor: '#b3592f',
+      success(res) {
+        if (!res.confirm) return;
+        const r = app.importBackup(json);
+        if (r.ok) {
+          that.setData({ showRestore: false, restoreDraft: '' });
+          that.refresh();
+          wx.showToast({ title: '恢复成功', icon: 'success' });
+        } else {
+          wx.showToast({ title: r.err, icon: 'none' });
+        }
+      }
+    });
   },
   doBackup() {
     const json = app.exportBackup();

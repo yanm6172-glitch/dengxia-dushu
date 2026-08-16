@@ -117,6 +117,10 @@
     <view class="setting-label">备份数据</view>
     <view class="setting-right">复制到剪贴板 ›</view>
   </view>
+  <view class="goal-row" bindtap="openRestore">
+    <view class="setting-label">恢复数据</view>
+    <view class="setting-right">粘贴备份还原 ›</view>
+  </view>
 
   <view class="section-title">我的书籍（{{customBooks.length}}）</view>
   <view class="empty" wx:if="{{customBooks.length === 0}}">还没有自藏书。点上方按钮，从微信文件或粘贴文本导入。</view>
@@ -142,6 +146,15 @@
       <view class="sheet-empty" wx:if="{{allMarks.length === 0}}">还没有摘抄，去阅读页长按喜欢的段落添加书签</view>
     </scroll-view>
     <button class="btn-copy" bindtap="copyMarks" disabled="{{allMarks.length === 0}}">复制全部摘抄</button>
+  </view>
+
+  <!-- 恢复面板 -->
+  <view class="mask" wx:if="{{showRestore}}" bindtap="closeRestore"></view>
+  <view class="marks-sheet" wx:if="{{showRestore}}">
+    <view class="sheet-title">恢复数据</view>
+    <view class="restore-tip">在下方粘贴之前「备份数据」复制的 JSON 文本，确认后覆盖当前数据。</view>
+    <textarea class="restore-input" placeholder="在此粘贴备份文本…" value="{{restoreDraft}}" bindinput="onRestoreInput" maxlength="-1"></textarea>
+    <button class="btn-copy" bindtap="doRestore">确认恢复</button>
   </view>
 
   <!-- 笔记面板 -->
