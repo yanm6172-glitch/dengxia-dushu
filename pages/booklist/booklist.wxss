@@ -1,0 +1,93 @@
+.page {
+  padding: 30rpx 30rpx 80rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.hero {
+  background: linear-gradient(135deg, #5a6a8c, #6b7ea3);
+  border-radius: 20rpx;
+  padding: 36rpx 34rpx;
+  color: #f4f6fa;
+  box-shadow: 0 8rpx 24rpx rgba(90, 106, 140, 0.25);
+}
+.b-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+}
+.b-sub {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  opacity: 0.85;
+  line-height: 1.7;
+}
+.section {
+  margin-top: 30rpx;
+}
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #8a7a5f;
+  letter-spacing: 3rpx;
+  padding: 0 8rpx 14rpx;
+}
+.book {
+  background: #fdfaf3;
+  border-radius: 14rpx;
+  padding: 20rpx 26rpx;
+  margin-bottom: 14rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.b-line {
+  display: flex;
+  align-items: center;
+}
+.b-star {
+  color: #c9a06a;
+  font-size: 26rpx;
+  margin-right: 8rpx;
+}
+.b-t {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.b-a {
+  margin-left: 12rpx;
+  font-size: 22rpx;
+  color: #9c8a6c;
+}
+.b-chip {
+  margin-left: 14rpx;
+  font-size: 20rpx;
+  color: #8c5a3c;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 8rpx;
+  padding: 2rpx 10rpx;
+  background: #f6efe2;
+}
+.b-r {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #6d5c42;
+  line-height: 1.6;
+}
+.how {
+  margin-top: 30rpx;
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.how-item {
+  font-size: 24rpx;
+  color: #5a4c35;
+  line-height: 1.9;
+}
+.foot {
+  margin-top: 40rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #b3a488;
+  line-height: 1.7;
+}

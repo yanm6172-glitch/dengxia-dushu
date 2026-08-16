@@ -1,4 +1,7 @@
 Page({
+  goBooklist() {
+    wx.navigateTo({ url: '/pages/booklist/booklist' });
+  },
   data: {
     months: [
       { m: '9 月', cat: '心性', main: '《被讨厌的勇气》', daily: '论语注疏 卷一~四', extra: '曾国藩家书（道光 22–23）' },

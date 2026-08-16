@@ -1,0 +1,33 @@
+<view class="page">
+  <view class="hero">
+    <view class="b-title">大学生必读书目库</view>
+    <view class="b-sub">8 类 60 本 · ★ 为核心 20 本 · 「书架」标记 = 小程序可直接读</view>
+  </view>
+
+  <view class="section" wx:for="{{sections}}" wx:key="name" wx:for-item="sec">
+    <view class="sec-title">{{sec.name}}</view>
+    <view class="book" wx:for="{{sec.books}}" wx:key="t" wx:for-item="b">
+      <view class="b-line">
+        <text class="b-star" wx:if="{{b.s}}">★</text>
+        <text class="b-t">{{b.t}}</text>
+        <text class="b-a">{{b.a}}</text>
+        <text class="b-chip" wx:if="{{b.f}}">书架</text>
+      </view>
+      <view class="b-r">{{b.r}}</view>
+    </view>
+  </view>
+
+  <view class="how">
+    <view class="sec-title">如何读（要点）</view>
+    <view class="how-item">1. 三个层次：泛读 60%（一句话评价）/ 精读 30%（读两遍+笔记）/ 研读 10%（主题阅读+输出）</view>
+    <view class="how-item">2. 选书 70/20/10：七成兴趣、两成补短、一成硬啃</view>
+    <view class="how-item">3. 节奏：一年 12 本精读（★ 优先）+ 36 本泛读，读一本算一本</view>
+    <view class="how-item">4. 精读笔记四问：讲了什么 / 怎么讲 / 哪三处有用 / 一句话推荐</view>
+    <view class="how-item">5. 读不懂：换译本 → 换入门书 → 降级泛读 → 放回书单三年后再读</view>
+    <view class="how-item">6. 版本：外文书认译者（傅雷/朱生豪/草婴），古籍认注本（中华书局）</view>
+    <view class="how-item">7. 时间：晨 20 分钟日课 + 睡前 20 分钟 + 周末 3 小时整块</view>
+    <view class="how-item">8. 配合本小程序：读「书架」标记的书 → 书签/笔记/书摘卡 → 月度导出摘抄</view>
+  </view>
+
+  <view class="foot">底本：教育部大学生必读书目 100 本 + 清华北大教授书单 · 全文见《大学生必读书目库.md》</view>
+</view>

@@ -27,4 +27,9 @@
   <view class="pool">{{pool}}</view>
 
   <view class="p-foot">书都在书架里 · 打开任意一本，开始今天的日课</view>
+  <view class="bl-entry" bindtap="goBooklist">
+    <text class="bl-ico">📖</text>
+    <text class="bl-text">大学生必读书目库 · 8 类 60 本 + 如何读</text>
+    <text class="bl-arrow">›</text>
+  </view>
 </view>
