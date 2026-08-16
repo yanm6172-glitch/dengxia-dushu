@@ -23,6 +23,10 @@ Page({
     marksPreview: [],
     allMarks: [],
     showMarks: false,
+    notesTotal: 0,
+    notesPreview: [],
+    allNotes: [],
+    showNotes: false,
     showReport: false,
     reportImage: ''
   },
@@ -48,6 +52,7 @@ Page({
     const s = auth.getSession();
     const openid = (s && s.openid) || '';
     const rows = app.getAllBookmarks();
+    const noteRows = app.getAllNotes();
     this.setData({
       totalHours: Math.round(st.totalSeconds / 3600 * 10) / 10,
       totalDays: st.totalDays,
@@ -64,7 +69,9 @@ Page({
       calendar: this.buildCalendar(st),
       monthLabel: (new Date().getMonth() + 1) + ' 月打卡',
       marksTotal: rows.length,
-      marksPreview: rows.slice(0, 2)
+      marksPreview: rows.slice(0, 2),
+      notesTotal: noteRows.length,
+      notesPreview: noteRows.slice(0, 2)
     });
   },
   goLogin() {
@@ -149,6 +156,23 @@ Page({
       data: text,
       success() {
         wx.showToast({ title: '已复制 ' + rows.length + ' 条摘抄', icon: 'success' });
+      }
+    });
+  },
+  openNotesSheet() {
+    this.setData({ showNotes: true, allNotes: app.getAllNotes() });
+  },
+  closeNotesSheet() {
+    this.setData({ showNotes: false });
+  },
+  copyNotes() {
+    const rows = app.getAllNotes();
+    if (!rows.length) return;
+    const text = rows.map((r, i) => (i + 1) + '. 《' + r.bookTitle + '》 ' + r.text + '\n   心得：' + r.note).join('\n\n');
+    wx.setClipboardData({
+      data: text,
+      success() {
+        wx.showToast({ title: '已复制 ' + rows.length + ' 条笔记', icon: 'success' });
       }
     });
   },

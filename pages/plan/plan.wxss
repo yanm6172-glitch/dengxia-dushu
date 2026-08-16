@@ -1,0 +1,92 @@
+.page {
+  padding: 30rpx 30rpx 80rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+.p-hero {
+  background: linear-gradient(135deg, #8c5a3c, #a06a48);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  color: #fdf6e9;
+  box-shadow: 0 8rpx 24rpx rgba(140, 90, 60, 0.25);
+}
+.p-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  letter-spacing: 6rpx;
+}
+.p-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  opacity: 0.85;
+}
+.principle {
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 26rpx 28rpx;
+  margin-top: 26rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #8a7a5f;
+  letter-spacing: 4rpx;
+  margin: 30rpx 8rpx 16rpx;
+}
+.p-item {
+  font-size: 26rpx;
+  color: #5a4c35;
+  line-height: 1.9;
+}
+.month {
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 22rpx 28rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.m-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.m-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #3b3224;
+}
+.m-cat {
+  font-size: 22rpx;
+  color: #a06a48;
+  border: 1rpx solid #d8c6a8;
+  border-radius: 20rpx;
+  padding: 4rpx 18rpx;
+  background: #f6efe2;
+}
+.m-main {
+  margin-top: 12rpx;
+  font-size: 28rpx;
+  color: #8c5a3c;
+  font-weight: 600;
+}
+.m-sub {
+  margin-top: 6rpx;
+  font-size: 24rpx;
+  color: #9c8a6c;
+}
+.pool {
+  background: #fdfaf3;
+  border-radius: 16rpx;
+  padding: 24rpx 28rpx;
+  font-size: 24rpx;
+  color: #6d5c42;
+  line-height: 1.9;
+  box-shadow: 0 2rpx 8rpx rgba(90, 70, 40, 0.06);
+}
+.p-foot {
+  margin-top: 40rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #b3a488;
+}

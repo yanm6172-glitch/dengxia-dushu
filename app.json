@@ -5,7 +5,8 @@
     "pages/mine/mine",
     "pages/import/import",
     "pages/login/login",
-    "pages/agreement/agreement"
+    "pages/agreement/agreement",
+    "pages/plan/plan"
   ],
 
   "tabBar": {

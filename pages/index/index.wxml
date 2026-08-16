@@ -24,6 +24,12 @@
     <button class="btn-read" catchtap="continueLast">继续读书</button>
   </view>
 
+  <view class="plan-bar" bindtap="goPlan">
+    <text class="plan-ico">📚</text>
+    <text class="plan-text">大三读书计划 · 每月读什么一目了然</text>
+    <text class="import-arrow">›</text>
+  </view>
+
   <view class="import-bar" bindtap="goImport">
     <text class="import-plus">＋</text>
     <text class="import-text">导入自己的书籍（txt 文件 / 粘贴文本）</text>

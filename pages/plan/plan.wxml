@@ -1,0 +1,30 @@
+<view class="page">
+  <view class="p-hero">
+    <view class="p-title">大三读书计划</view>
+    <view class="p-sub">主题：提升自身发展涵养 · 2026–2027 学年</view>
+  </view>
+
+  <view class="principle">
+    <view class="sec-title">总原则</view>
+    <view class="p-item">1. 每天 25 分钟古籍日课：出声读 + 圈点，不求快</view>
+    <view class="p-item">2. 每月 1 本主读精读书 + 1 本随翻书</view>
+    <view class="p-item">3. 每本书都有输出：笔记 / 摘抄 / 书评任选</view>
+    <view class="p-item">4. 期末月减量，复习优先；读不进去就换</view>
+  </view>
+
+  <view class="sec-title">全年安排</view>
+  <view class="month" wx:for="{{months}}" wx:key="m">
+    <view class="m-head">
+      <text class="m-name">{{item.m}}</text>
+      <text class="m-cat">{{item.cat}}</text>
+    </view>
+    <view class="m-main">主读：{{item.main}}</view>
+    <view class="m-sub">日课：{{item.daily}}</view>
+    <view class="m-sub" wx:if="{{item.extra}}">随翻：{{item.extra}}</view>
+  </view>
+
+  <view class="sec-title">备选书池</view>
+  <view class="pool">{{pool}}</view>
+
+  <view class="p-foot">书都在书架里 · 打开任意一本，开始今天的日课</view>
+</view>

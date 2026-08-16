@@ -265,3 +265,21 @@
   transform: scale(0.98);
   opacity: 0.92;
 }
+.plan-bar {
+  margin-top: 22rpx;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #5f7d5f, #6f8f6f);
+  border-radius: 16rpx;
+  padding: 22rpx 26rpx;
+  color: #f4f8f4;
+  box-shadow: 0 4rpx 14rpx rgba(95, 125, 95, 0.25);
+}
+.plan-ico {
+  font-size: 30rpx;
+  margin-right: 14rpx;
+}
+.plan-text {
+  flex: 1;
+  font-size: 26rpx;
+}

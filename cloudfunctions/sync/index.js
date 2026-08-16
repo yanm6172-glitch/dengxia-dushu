@@ -6,7 +6,7 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 
 const db = cloud.database();
 const COLLECTION = 'readers';
-const SECTIONS = ['progress', 'stats', 'bookmarks', 'customBooks'];
+const SECTIONS = ['progress', 'stats', 'bookmarks', 'notes', 'customBooks'];
 
 exports.main = async (event) => {
   const { OPENID } = cloud.getWXContext();

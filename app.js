@@ -85,6 +85,9 @@ App({
       merge('bookmarks', (v) => {
         try { wx.setStorageSync('bookmarks', v || {}); } catch (e) {}
       });
+      merge('notes', (v) => {
+        try { wx.setStorageSync('notes', v || {}); } catch (e) {}
+      });
       merge('customBooks', (v) => {
         that.globalData.customBooks = v || [];
         try { wx.setStorageSync('custom_books', that.globalData.customBooks); } catch (e) {}
@@ -103,6 +106,8 @@ App({
       else if (section === 'stats') data = that.globalData.stats;
       else if (section === 'bookmarks') {
         try { data = wx.getStorageSync('bookmarks') || {}; } catch (e) { data = {}; }
+      } else if (section === 'notes') {
+        try { data = wx.getStorageSync('notes') || {}; } catch (e) { data = {}; }
       } else if (section === 'customBooks') data = that.globalData.customBooks;
       if (!data) return;
       const now = Date.now();
@@ -129,6 +134,41 @@ App({
     this.scheduleCloudPush('bookmarks');
   },
   // 全部书签（摘抄）汇总：跨书合并，附书名，按时间倒序
+  getBookNotes(bookId) {
+    let all = {};
+    try { all = wx.getStorageSync('notes') || {}; } catch (e) {}
+    return all[bookId] || [];
+  },
+  setBookNotes(bookId, notes) {
+    let all = {};
+    try { all = wx.getStorageSync('notes') || {}; } catch (e) {}
+    all[bookId] = notes;
+    try { wx.setStorageSync('notes', all); } catch (e) {}
+    this.scheduleCloudPush('notes');
+  },
+  getAllNotes() {
+    let all = {};
+    try { all = wx.getStorageSync('notes') || {}; } catch (e) {}
+    const titleMap = {};
+    books.list.forEach((b) => { titleMap[b.id] = b.title; });
+    (this.globalData.customBooks || []).forEach((b) => { titleMap[b.id] = b.title; });
+    const rows = [];
+    Object.keys(all).forEach((bid) => {
+      const notes = all[bid] || [];
+      notes.forEach((n) => {
+        rows.push({
+          bookId: bid,
+          bookTitle: titleMap[bid] || '未命名书',
+          text: n.t,
+          note: n.note,
+          idx: n.idx,
+          ts: n.ts || 0
+        });
+      });
+    });
+    rows.sort((a, b) => b.ts - a.ts);
+    return rows;
+  },
   getAllBookmarks() {
     let all = {};
     try { all = wx.getStorageSync('bookmarks') || {}; } catch (e) {}

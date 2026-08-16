@@ -102,6 +102,9 @@ Page({
       wx.navigateTo({ url: '/pages/reader/reader?id=' + this.data.lastBook.id });
     }
   },
+  goPlan() {
+    wx.navigateTo({ url: '/pages/plan/plan' });
+  },
   goImport() {
     wx.navigateTo({ url: '/pages/import/import' });
   },

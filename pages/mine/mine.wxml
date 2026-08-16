@@ -64,6 +64,17 @@
     <view class="setting-label">每日阅读提醒</view>
     <view class="setting-right">{{remind ? '已开启' : '未开启'}} ›</view>
   </view>
+  <view class="notes-card" bindtap="openNotesSheet">
+    <view class="marks-head">
+      <view class="setting-label">我的笔记（{{notesTotal}}）</view>
+      <view class="setting-right">{{notesTotal > 0 ? '查看全部 ›' : '长按段落选「写笔记」 ›'}}</view>
+    </view>
+    <view class="marks-item" wx:for="{{notesPreview}}" wx:key="idx">
+      <view class="marks-src">《{{item.bookTitle}}》 {{item.text}}</view>
+      <view class="marks-text">心得：{{item.note}}</view>
+    </view>
+  </view>
+
   <view class="marks-card" bindtap="openMarksSheet">
     <view class="marks-head">
       <view class="setting-label">我的摘抄（{{marksTotal}}）</view>
@@ -110,6 +121,20 @@
       <view class="sheet-empty" wx:if="{{allMarks.length === 0}}">还没有摘抄，去阅读页长按喜欢的段落添加书签</view>
     </scroll-view>
     <button class="btn-copy" bindtap="copyMarks" disabled="{{allMarks.length === 0}}">复制全部摘抄</button>
+  </view>
+
+  <!-- 笔记面板 -->
+  <view class="mask" wx:if="{{showNotes}}" bindtap="closeNotesSheet"></view>
+  <view class="marks-sheet" wx:if="{{showNotes}}">
+    <view class="sheet-title">全部笔记（{{allNotes.length}}）</view>
+    <scroll-view scroll-y class="sheet-list">
+      <view class="marks-item" wx:for="{{allNotes}}" wx:key="idx">
+        <view class="marks-src">《{{item.bookTitle}}》 {{item.text}}</view>
+        <view class="marks-text">心得：{{item.note}}</view>
+      </view>
+      <view class="sheet-empty" wx:if="{{allNotes.length === 0}}">还没有笔记，去阅读页长按段落选「写笔记」</view>
+    </scroll-view>
+    <button class="btn-copy" bindtap="copyNotes" disabled="{{allNotes.length === 0}}">复制全部笔记</button>
   </view>
 
   <!-- 阅读报告 -->

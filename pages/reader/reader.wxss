@@ -436,3 +436,58 @@
 .share-overlay {
   animation: fadeIn 0.25s ease;
 }
+/* 笔记 */
+.note-item {
+  padding: 16rpx 4rpx;
+  border-bottom: 1rpx solid;
+}
+.theme-paper .note-item, .theme-rice .note-item { border-bottom-color: #efe5d2; }
+.theme-green .note-item { border-bottom-color: #c9d8c9; }
+.theme-night .note-item { border-bottom-color: #3a342a; }
+.note-quote {
+  font-size: 24rpx;
+  opacity: 0.75;
+}
+.note-body {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.theme-paper .note-body, .theme-rice .note-body { color: #5a4c35; }
+.theme-green .note-body { color: #3c523c; }
+.theme-night .note-body { color: #d8cfc0; }
+.note-editor { padding-bottom: calc(30rpx + env(safe-area-inset-bottom)); }
+.note-src {
+  font-size: 22rpx;
+  opacity: 0.65;
+  line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+.note-input {
+  width: 100%;
+  height: 220rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  line-height: 1.7;
+}
+.theme-paper .note-input, .theme-rice .note-input { background: #f6efe2; color: #3b3224; }
+.theme-green .note-input { background: #dce9dc; color: #2f3b2f; }
+.theme-night .note-input { background: #2c2820; color: #d8cfc0; }
+.note-btns {
+  display: flex;
+  margin-top: 20rpx;
+}
+.nb {
+  flex: 1;
+  margin: 0 10rpx;
+  border-radius: 36rpx;
+  padding: 10rpx 0;
+  font-size: 28rpx;
+}
+.nb.save { background: #8c5a3c; color: #fdf6e9; }
+.nb.cancel { border: 1rpx solid #d8c6a8; color: #6d5c42; }
+.theme-night .nb.cancel { border-color: #3a342a; color: #b9ad97; }
+.nb.del { border: 1rpx solid #e0c0a8; color: #b3592f; }

@@ -132,6 +132,13 @@ Page({
     currentChapter: '',
     curHeadIdx: -1,
     bookmarkCount: 0,
+    notes: [],
+    noteCount: 0,
+    showNoteEditor: false,
+    noteDraft: '',
+    noteTargetIdx: -1,
+    noteSrcText: '',
+    noteExists: false,
     viewMode: 'text',
     chrome: true,
     autoOn: false,
@@ -164,6 +171,7 @@ Page({
     this.setData({ viewMode: 'text', title: book.title, author: book.author, fontSize, theme, font });
     wx.setNavigationBarTitle({ title: book.title });
     this.loadMarks();
+    this.loadNotes();
     this.loadBook(book);
   },
   onShow() {
@@ -184,6 +192,70 @@ Page({
   },
   saveMarks() {
     app.setBookmarks(this.book.id, this.data.marks);
+  },
+  loadNotes() {
+    const notes = app.getBookNotes(this.book.id);
+    this.setData({ notes, noteCount: notes.length });
+  },
+  saveNotesLocal() {
+    app.setBookNotes(this.book.id, this.data.notes);
+  },
+  openNoteEditor(idx) {
+    const para = this.data.paragraphs[idx];
+    if (!para) return;
+    const old = this.data.notes.find((n) => n.idx === idx);
+    this.setData({
+      showNoteEditor: true,
+      noteTargetIdx: idx,
+      noteDraft: old ? old.note : '',
+      noteSrcText: para.t.slice(0, 40) + (para.t.length > 40 ? '…' : ''),
+      noteExists: !!old
+    });
+  },
+  onNoteInput(e) {
+    this.setData({ noteDraft: e.detail.value });
+  },
+  saveNote() {
+    const note = this.data.noteDraft.trim();
+    if (!note) {
+      wx.showToast({ title: '请写点心得', icon: 'none' });
+      return;
+    }
+    const idx = this.data.noteTargetIdx;
+    const para = this.data.paragraphs[idx];
+    const notes = this.data.notes.slice();
+    const i = notes.findIndex((n) => n.idx === idx);
+    const item = {
+      idx,
+      t: para ? para.t.slice(0, 24) + (para.t.length > 24 ? '…' : '') : '',
+      note,
+      ts: Date.now()
+    };
+    if (i >= 0) notes[i] = item; else notes.push(item);
+    notes.sort((a, b) => a.idx - b.idx);
+    this.setData({ notes, noteCount: notes.length, showNoteEditor: false, noteDraft: '' });
+    this.saveNotesLocal();
+    wx.showToast({ title: '笔记已保存', icon: 'success' });
+  },
+  cancelNote() {
+    this.setData({ showNoteEditor: false, noteDraft: '' });
+  },
+  deleteNoteFromEditor() {
+    const idx = this.data.noteTargetIdx;
+    const notes = this.data.notes.filter((n) => n.idx !== idx);
+    this.setData({ notes, noteCount: notes.length, showNoteEditor: false, noteDraft: '' });
+    this.saveNotesLocal();
+  },
+  deleteNoteFromList(e) {
+    const idx = e.currentTarget.dataset.idx;
+    const notes = this.data.notes.filter((n) => n.idx !== idx);
+    this.setData({ notes, noteCount: notes.length });
+    this.saveNotesLocal();
+    wx.showToast({ title: '笔记已删除', icon: 'none' });
+  },
+  goNote(e) {
+    const idx = e.currentTarget.dataset.idx;
+    this.setData({ showCatalog: false, scrollIntoView: 'p' + idx });
   },
   loadBook(book) {
     const that = this;
@@ -554,7 +626,7 @@ Page({
     if (!para) return;
     const that = this;
     wx.showActionSheet({
-      itemList: ['复制本段', '添加书签', '生成书摘卡'],
+      itemList: ['复制本段', '添加书签', '写笔记', '生成书摘卡'],
       success(res) {
         if (res.tapIndex === 0) {
           wx.setClipboardData({ data: para.t });
@@ -575,6 +647,8 @@ Page({
           that.saveMarks();
           wx.showToast({ title: '已加入书签', icon: 'success' });
         } else if (res.tapIndex === 2) {
+          that.openNoteEditor(idx);
+        } else if (res.tapIndex === 3) {
           that.makeShareCard(idx);
         }
       }

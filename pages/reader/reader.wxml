@@ -85,16 +85,24 @@
       <view class="catalog-tabs">
         <view class="ct {{catTab === 'catalog' ? 'on' : ''}}" bindtap="setCatTab" data-t="catalog">目录</view>
         <view class="ct {{catTab === 'mark' ? 'on' : ''}}" bindtap="setCatTab" data-t="mark">书签（{{marks.length}}）</view>
+        <view class="ct {{catTab === 'note' ? 'on' : ''}}" bindtap="setCatTab" data-t="note">笔记（{{notes.length}}）</view>
       </view>
       <scroll-view scroll-y class="panel-list" wx:if="{{catTab === 'catalog'}}">
         <view class="catalog-item {{item.idx === curHeadIdx ? 'active' : ''}}" wx:for="{{catalog}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goCatalog">{{item.t}}</view>
         <view class="catalog-empty" wx:if="{{catalog.length === 0}}">本书没有识别到章节标题</view>
       </scroll-view>
-      <scroll-view scroll-y class="panel-list" wx:else>
+      <scroll-view scroll-y class="panel-list" wx:elif="{{catTab === 'mark'}}">
         <view class="mark-item" wx:for="{{marks}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goMark" bindlongpress="deleteMark">
           <view class="mark-text">{{item.t}}</view>
         </view>
         <view class="catalog-empty" wx:if="{{marks.length === 0}}">还没有书签，长按正文段落即可添加</view>
+      </scroll-view>
+      <scroll-view scroll-y class="panel-list" wx:else>
+        <view class="note-item" wx:for="{{notes}}" wx:key="idx" data-idx="{{item.idx}}" bindtap="goNote" bindlongpress="deleteNoteFromList">
+          <view class="note-quote">{{item.t}}</view>
+          <view class="note-body">{{item.note}}</view>
+        </view>
+        <view class="catalog-empty" wx:if="{{notes.length === 0}}">还没有笔记，长按段落选「写笔记」</view>
       </scroll-view>
     </view>
 
@@ -121,6 +129,19 @@
         <view class="font-item {{font === 'song' ? 'on' : ''}}" data-f="song" bindtap="pickFont">宋体</view>
         <view class="font-item {{font === 'kai' ? 'on' : ''}}" data-f="kai" bindtap="pickFont">楷体</view>
         <view class="font-item {{font === 'hei' ? 'on' : ''}}" data-f="hei" bindtap="pickFont">黑体</view>
+      </view>
+    </view>
+
+    <!-- 写笔记 -->
+    <view class="mask" wx:if="{{showNoteEditor}}" bindtap="cancelNote"></view>
+    <view class="bottom-panel note-editor" wx:if="{{showNoteEditor}}">
+      <view class="panel-title">写笔记</view>
+      <view class="note-src">原文：{{noteSrcText}}</view>
+      <textarea class="note-input" placeholder="写下你的心得…" value="{{noteDraft}}" bindinput="onNoteInput" maxlength="500" focus="{{showNoteEditor}}"></textarea>
+      <view class="note-btns">
+        <button class="nb del" wx:if="{{noteExists}}" bindtap="deleteNoteFromEditor">删除</button>
+        <button class="nb cancel" bindtap="cancelNote">取消</button>
+        <button class="nb save" bindtap="saveNote">保存</button>
       </view>
     </view>
 
